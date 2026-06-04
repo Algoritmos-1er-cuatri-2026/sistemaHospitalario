@@ -1,4 +1,4 @@
-#include "Derivacion.h"
+#include "../header/Derivacion.h"
 
 Derivacion::Derivacion(string origen, string destino, int tiempo) {
     this->hospitalOrigen = origen;

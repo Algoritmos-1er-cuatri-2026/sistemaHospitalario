@@ -1,4 +1,4 @@
-#include "SistemaHospitalario.h"
+#include "../header/SistemaHospitalario.h"
 #include <iostream>
 #include <queue> 
 
