@@ -1,0 +1,2 @@
+HGA HospitalGarrahan BuenosAires 500 Pediatria,Cardiologia 320 15000000 HIT
+HospitalItaliano Cordoba 300 Traumatologia,Neurologia 190 9000000

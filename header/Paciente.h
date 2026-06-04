@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <string>
-#include <Turno.h>
+#include "Turno.h"
 using namespace std;
 
 class Paciente

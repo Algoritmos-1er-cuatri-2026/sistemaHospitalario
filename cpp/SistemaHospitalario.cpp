@@ -4,6 +4,24 @@
 
 using namespace std;
 
+
+void SistemaHospitalario::mostrarInformacionDeHospital(string codigo) { //PUNTO 1.
+    for(int i = 0; i < listaHospitales.size(); i++) {
+        if (this->listaHospitales[i].getCodigo() == codigo){
+            listaHospitales[i].mostrarInformacion();
+        }
+
+    }
+}
+
+void SistemaHospitalario::registrarHospital(Hospital nuevoHospital) {
+    this->listaHospitales.push_back(nuevoHospital);
+}
+
+void SistemaHospitalario::registrarDerivacion(Derivacion nuevaDerivacion) {
+    this->listaDerivaciones.push_back(nuevaDerivacion);
+}
+
 int SistemaHospitalario::obtenerIndice(string codigo) {
     for (size_t i = 0; i < this->listaHospitales.size(); i++) { 
         if (this->listaHospitales[i].getCodigo() == codigo) return i;

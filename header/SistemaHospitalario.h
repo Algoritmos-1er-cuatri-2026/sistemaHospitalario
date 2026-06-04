@@ -1,13 +1,13 @@
 #ifndef SISTEMAHOSPITALARIO_H
 #define SISTEMAHOSPITALARIO_H
 
-#include <Hospital.h>
-#include <Paciente.h>
-#include <Medico.h>
-#include <Diagnostico.h>
-#include <Derivacion.h>
-#include <Turno.h>
-#include <Insumo.h>
+#include "Hospital.h"
+#include "Paciente.h"
+#include "Medico.h"
+#include "Diagnostico.h"
+#include "Derivacion.h"
+#include "Turno.h"
+#include "Insumo.h"
 #include <vector>
 #include <string>
 using namespace std;
@@ -21,10 +21,15 @@ private:
     vector<Derivacion> listaDerivaciones;
 
 public:
+    void registrarHospital(Hospital nuevoHospital);
+    void registrarDerivacion(Derivacion nuevaDerivacion);
+
+    //lecturas de archivos ⬆
+
     void agregarNuevoHospital();
     void eliminarHospital();
     vector<Hospital *> listarHospitales();
-    void mostrarInformaciónDeHospital(int codigo);
+    void mostrarInformacionDeHospital(string codigo); // Punto 1
     bool tieneEspecialidad(int codigo, string especialidad);
     int calcularPacientesAtendidos(int codigo, string fecha);
     void gestionarListaDeEspera(int codigo);

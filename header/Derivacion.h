@@ -2,7 +2,7 @@
 #define DERIVACION_H
 
 #include <vector>
-#include <Insumo.h>
+#include "Insumo.h"
 using namespace std;
 
 class Derivacion {
