@@ -26,6 +26,7 @@ public:
     bool tieneEspecialidad(string especialidad);
     int calcularPacientesAtendidos(int fechaDesde, int fechaHasta); 
     void gestionarListaDeEspera();
+    string getCodigo();
 
 };
 

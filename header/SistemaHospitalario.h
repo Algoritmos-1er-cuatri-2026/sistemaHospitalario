@@ -5,6 +5,7 @@
 #include <Paciente.h>
 #include <Medico.h>
 #include <Diagnostico.h>
+#include <Derivacion.h>
 #include <Turno.h>
 #include <Insumo.h>
 #include <vector>
@@ -14,12 +15,12 @@ using namespace std;
 class SistemaHospitalario
 {
 private:
-    vector<Hospital *> hospitales;
+    vector<Hospital> listaHospitales;
     vector<Paciente *> pacientes;
     vector<Medico *> medicos;
+    vector<Derivacion> listaDerivaciones;
 
 public:
-
     void agregarNuevoHospital();
     void eliminarHospital();
     vector<Hospital *> listarHospitales();
@@ -38,7 +39,9 @@ public:
     bool detectarDesbalanceo();
     vector<Turno *> buscarTodosLosTurnos(int dni);
     vector<Turno *> listarTurnosCronologicamente(int idMedico);
-    void derivar(Hospital HospitalOrigen, Hospital HospitalDestino,vector<Insumo *>  listaInsumos);
+    void calcularRutaMasRapida(string codigoOrigen, string codigoDestino); // A.5
+    int obtenerIndice(string codigo); 
+    vector<Hospital> mostrarLista();
 };
 
 #endif
