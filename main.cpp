@@ -66,7 +66,7 @@ int main() {
         case 1:
         {
             string codigo;
-            cout<<"Ingrese el codigo del hospital del cual desea informacion";
+            cout<<"Ingrese el codigo del hospital del cual desea informacion \n";
             cin>>codigo;
             sistema.mostrarInformacionDeHospital(codigo);
             volverAlMenu();
@@ -78,9 +78,6 @@ int main() {
         case 0:
             cout << "Hasta luego\n";
             break;
-
-        default:
-            cout << "Opcion invalida\n";
     }
 
 } while(opcion != 0);

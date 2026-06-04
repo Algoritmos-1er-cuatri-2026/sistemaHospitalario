@@ -9,9 +9,10 @@ void SistemaHospitalario::mostrarInformacionDeHospital(string codigo) { //PUNTO 
     for(int i = 0; i < listaHospitales.size(); i++) {
         if (this->listaHospitales[i].getCodigo() == codigo){
             listaHospitales[i].mostrarInformacion();
+            return;
         }
-
     }
+    cout<<"No existe el hospital ingresado \n";
 }
 
 void SistemaHospitalario::registrarHospital(Hospital nuevoHospital) {
