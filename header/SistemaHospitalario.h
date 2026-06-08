@@ -16,34 +16,33 @@ class SistemaHospitalario
 {
 private:
     vector<Hospital> listaHospitales;
-    vector<Paciente *> pacientes;
-    vector<Medico *> medicos;
+    vector<Paciente> pacientes;
+    vector<Medico> medicos;
     vector<Derivacion> listaDerivaciones;
 
 public:
-    void registrarHospital(Hospital nuevoHospital);
     void registrarDerivacion(Derivacion nuevaDerivacion);
 
     //lecturas de archivos ⬆
 
-    void agregarNuevoHospital();
-    void eliminarHospital();
-    vector<Hospital *> listarHospitales();
+    void registrarHospital(Hospital nuevoHospital);
+    void eliminarHospital(string codigo);
+    vector<Hospital> listarHospitales();
     void mostrarInformacionDeHospital(string codigo); // Punto 1
     bool tieneEspecialidad(int codigo, string especialidad);
     int calcularPacientesAtendidos(int codigo, string fecha);
     void gestionarListaDeEspera(int codigo);
     int calcularRuta(Hospital HospitalOrigen, Hospital HospitalDestino);
-    vector<Hospital *> ordenarPorDisponibilidad(Hospital hospital);
-    vector<Hospital *> detectarSobrecargaDePacientes(int cantidad);
+    vector<Hospital> ordenarPorDisponibilidad(Hospital hospital);
+    vector<Hospital> detectarSobrecargaDePacientes(int cantidad);
     void insertarDiagnostico(string nombre, int frecuencia);
     void incrementarFrecuenciaDiagnostico(string nombre);
-    vector<Diagnostico *> listarDiagnosticos();
+    vector<Diagnostico> listarDiagnosticos();
     Diagnostico mostrarDiagnosticoFrecuente();
     void eliminarDiagnostico(string nombre);
     bool detectarDesbalanceo();
-    vector<Turno *> buscarTodosLosTurnos(int dni);
-    vector<Turno *> listarTurnosCronologicamente(int idMedico);
+    vector<Turno> buscarTodosLosTurnos(int dni);
+    vector<Turno> listarTurnosCronologicamente(int idMedico);
     void calcularRutaMasRapida(string codigoOrigen, string codigoDestino); // A.5
     int obtenerIndice(string codigo); 
     vector<Hospital> mostrarLista();

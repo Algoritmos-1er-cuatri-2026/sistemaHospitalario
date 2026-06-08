@@ -19,6 +19,17 @@ void SistemaHospitalario::registrarHospital(Hospital nuevoHospital) {
     this->listaHospitales.push_back(nuevoHospital);
 }
 
+void SistemaHospitalario::eliminarHospital(string codigo) {
+    int indice = obtenerIndice(codigo);
+
+    if (indice == -1) {
+        cout << "Error: El hospital con codigo " << codigo << " no existe." << endl;
+        return;
+    }
+
+    this->listaHospitales.erase(this->listaHospitales.begin() + indice);
+}
+
 void SistemaHospitalario::registrarDerivacion(Derivacion nuevaDerivacion) {
     this->listaDerivaciones.push_back(nuevaDerivacion);
 }
