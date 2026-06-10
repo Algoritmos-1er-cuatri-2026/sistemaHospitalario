@@ -25,10 +25,10 @@ public:
 
     //lecturas de archivos ⬆
 
-    void registrarHospital(Hospital nuevoHospital);
-    void eliminarHospital(string codigo);
-    vector<Hospital> listarHospitales();
-    void mostrarInformacionDeHospital(string codigo); // Punto 1
+    void registrarHospital(Hospital nuevoHospital); // Punto A.2
+    void eliminarHospital(string codigo); // Punto A.3 - falta reasignar pacientes
+    vector<Hospital> listarHospitales(int filtro);
+    void mostrarInformacionDeHospital(string codigo); // Punto A.1
     bool tieneEspecialidad(int codigo, string especialidad);
     int calcularPacientesAtendidos(int codigo, string fecha);
     void gestionarListaDeEspera(int codigo);
