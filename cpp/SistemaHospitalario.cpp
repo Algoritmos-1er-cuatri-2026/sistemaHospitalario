@@ -96,7 +96,11 @@ vector<Hospital> SistemaHospitalario::listarHospitales(int criterio) {
     return listaOrdenada;
 }
 
-// Dijkstra:
+// EJERCICIO DERIVACIÓN CON DIJKSTRA: 
+
+void SistemaHospitalario::agregarDerivacion(Derivacion d) {
+    this->listaDerivaciones.push_back(d);
+}
 
 void SistemaHospitalario::calcularRutaMasRapida(string origen, string destino) {
     int indiceOrigen = obtenerIndice(origen);
@@ -137,10 +141,108 @@ for(int i = 0; i < grafo.size(); i++)
     cout << endl;
 }
 
-// crear dijkstra
+//Implementación dijkstra:
 
 
 cout<<"Calculando ruta entre "<<origen<<" y "<<destino<<endl;
 
+const int INF = 99999;
+    int n = listaHospitales.size();
+
+    vector<int> distancia(n, INF);
+    vector<bool> visitado(n, false);
+    vector<int> padre(n, -1); 
+
+   
+    distancia[indiceOrigen] = 0;
+
+    
+    for (int i = 0; i < n - 1; i++) {
+        
+        int min_distancia = INF;
+        int u = -1;
+
+        for (int v = 0; v < n; v++) {
+            if (!visitado[v] && distancia[v] < min_distancia) {
+                min_distancia = distancia[v];
+                u = v;
+            }
+        }
+
+        
+        if (u == -1 || distancia[u] == INF) {
+            break;
+        }
+
+        
+        visitado[u] = true;
+
+        
+        if (u == indiceDestino) {
+            break;
+        }
+
+       
+        for (int v = 0; v < n; v++) {
+            
+            if (!visitado[v] && grafo[u][v] != INF && distancia[u] + grafo[u][v] < distancia[v]) {
+                distancia[v] = distancia[u] + grafo[u][v];
+                padre[v] = u; 
+            }
+        }
+    }
+
+   
+    if (distancia[indiceDestino] == INF) {
+        cout << "No existe una ruta de derivación disponible entre " << origen << " y " << destino << "." << endl;
+    } else {
+        cout << "\n Camino minimo encontrado: " << endl;
+        cout << "Tiempo total de traslado: " << distancia[indiceDestino] << " minutos." << endl;
+
+        
+        vector<int> camino;
+        int actual = indiceDestino;
+        while (actual != -1) {
+            camino.push_back(actual);
+            actual = padre[actual];
+        }
+
+        
+        cout << "Ruta a seguir: ";
+        for (int i = camino.size() - 1; i >= 0; i--) {
+            int idx = camino[i];
+            
+            cout << listaHospitales[idx].getCodigo(); 
+            
+            if (i > 0) {
+                cout << " -> ";
+            }
+        }
+        cout << endl;
+    }
+}
+
+void SistemaHospitalario::buscarPorEspecialidad(string especialidad) {
+    vector<Hospital> hospitalesFiltrados;
+
+    for (Hospital h : this->listaHospitales) {
+        if (h.tieneEspecialidad(especialidad)) {
+            hospitalesFiltrados.push_back(h);
+        }
+    }
+    
+    if (hospitalesFiltrados.empty()) {
+        cout << "No se encontraron hospitales con la especialidad: " << especialidad << endl;
+        return;
+    }
+
+    //ordenamos reutilizando el quicskort del punto 4 ya que el criterio 1 era camas.
+
+    quickSort(hospitalesFiltrados,0,hospitalesFiltrados.size()-1,1);
+
+    cout << "\n--- Hospitales con especialidad en " << especialidad << " ---" << endl;
+    for (Hospital h : hospitalesFiltrados) {
+        cout << "Hospital: " << h.getCodigo() << " | Camas disponibles: " << h.getCapacidad() << " | Especialidades totales : " << h.getEspecialidades() << endl;
+    }
 }
 

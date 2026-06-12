@@ -44,3 +44,33 @@ void Hospital::mostrarInformacion() {
     cout << "Personal: " << personalMedico << endl;
     cout << "Presupuesto: " << presupuestoAnual << endl;
 }
+
+bool Hospital::tieneEspecialidad(string especialidad) {
+
+    string especialidadHospitalMin = "";
+    string especialidadBusquedaMin = "";
+
+    for (size_t i = 0; i < this->especialidades.length(); i++) // pasamos a minusculas las especialidades del hospital
+    {
+        char c = this->especialidades[i];
+        if (c>= 'A' && c<= 'Z') {
+            c = c+32; // la diferencia ascii entre mayus y minusculas es siempre 32
+        }
+        especialidadHospitalMin += c;
+    }
+
+    for (size_t i = 0; i < especialidad.length(); i++) // pasamos a minuscula las especialidades buscadas por el usuario
+    {
+        char c = especialidad[i];
+        if (c>= 'A' && c<= 'Z') {
+            c = c+32;
+        }
+        especialidadBusquedaMin += c;
+    }
+
+    
+    if (especialidadHospitalMin.find(especialidadBusquedaMin) != string::npos) { //!= string::npos se usa para representar los no encontrados.. sin eso cuando falla c++ devuelve un -1 y entra igual al if.
+        return true;
+    }
+    return false;
+}

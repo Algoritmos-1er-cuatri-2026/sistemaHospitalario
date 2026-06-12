@@ -43,6 +43,33 @@ int main()
         cout << "Error: No se pudo abrir el archivo de hospitales.\n";
     }
 
+
+    // Lectura derivacion
+    ifstream archDerivacion("datos/derivaciones.txt");
+
+    if (archDerivacion.is_open())
+    {
+        string origen, destino;
+        int tiempo;
+
+        while (archDerivacion>> origen >> destino >> tiempo)
+        {
+
+            Derivacion nuevaDeri(origen, destino, tiempo);
+            sistema.agregarDerivacion(nuevaDeri);
+        }
+
+        archDerivacion.close();
+        cout << "Base de datos de derivaciones cargada con exito.\n";
+    }
+    else
+    {
+        cout << "Error: No se pudo abrir el archivo de derivaciones.\n";
+    }
+
+
+
+
     // Interfaz para el usuario
 
     cout << "Bienvenido al Sistema hospitalario" << endl;
@@ -67,6 +94,8 @@ int main()
                     cout << "2 - Agregar un nuevo hospital al sistema" << endl;
                     cout << "3 - Eliminar un hospital del sistema" << endl;
                     cout << "4. Listar hospitales ordenados (camas, personal o presupuesto)" << endl;
+                    cout << "5. Calcular lista mas rapida entre dos hospitales"<<endl;
+                    cout << "6. Buscar hospitales por especialidad ordenados por capacidad de camas."<< endl;
                     cout << "0 - Volver al menu del sistema hospitalario" << endl;
                     cin>> opcionHospital;
 
@@ -143,6 +172,20 @@ int main()
                                 cout<< " | Presupuesto: $" << ordenados[i].getPresupuesto() << endl;
                             }
                             
+                        }
+                        case 5: {
+                            string origen,destino;
+                            cout<<"Ingrese el codigo del hopital origen : "<<endl;
+                            cin>>origen;
+                            cout<<"Ingrese el codigo del hopital destino : "<<endl;
+                            cin>>destino;
+                            sistema.calcularRutaMasRapida(origen,destino);
+                        }
+                        case 6: {
+                            string especialidad;
+                            cout<<"Ingrese la especialidad buscada"<<endl;
+                            cin>>especialidad;
+                            sistema.buscarPorEspecialidad(especialidad);
                         }
                         case 0:
                             cout << "Volviendo al menu del sistema hospitalario" << endl;

@@ -27,12 +27,13 @@ public:
 
     void registrarHospital(Hospital nuevoHospital); // Punto A.2
     void eliminarHospital(string codigo); // Punto A.3 - falta reasignar pacientes
-    vector<Hospital> listarHospitales(int filtro);
+    vector<Hospital> listarHospitales(int filtro); // Punto A.4
     void mostrarInformacionDeHospital(string codigo); // Punto A.1
+    void agregarDerivacion(Derivacion d); //Punto A.5
+    void buscarPorEspecialidad(string especialidad); // Punto A.6
     bool tieneEspecialidad(int codigo, string especialidad);
     int calcularPacientesAtendidos(int codigo, string fecha);
     void gestionarListaDeEspera(int codigo);
-    int calcularRuta(Hospital HospitalOrigen, Hospital HospitalDestino);
     vector<Hospital> ordenarPorDisponibilidad(Hospital hospital);
     vector<Hospital> detectarSobrecargaDePacientes(int cantidad);
     void insertarDiagnostico(string nombre, int frecuencia);
