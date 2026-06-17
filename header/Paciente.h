@@ -1,24 +1,24 @@
 #ifndef PACIENTE_H
 #define PACIENTE_H
 
-#include <vector>
 #include <string>
-#include "Turno.h"
 using namespace std;
 
 class Paciente
 {
 private:
+    string codigoHospital;
     int idPaciente;
     int dni;
     int fechaIngreso;
-    string diagnostico; //Tipo Diagnostico en lugar de string?
+    string diagnostico; 
     int prioridad;
     float pesoKg;
-    vector<Turno*> turnos;
 
 public:
-    void listarTurnos();
+    Paciente(string hosp, int id, int dni, int fecha, string diag, int prio, float peso);
+    int getIdPaciente();
+    int getDni();
 };
 
 #endif

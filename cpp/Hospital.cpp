@@ -74,3 +74,11 @@ bool Hospital::tieneEspecialidad(string especialidad) {
     }
     return false;
 }
+
+void Hospital::registrarTurno(Turno nuevoTurno) {
+    this->turnos.push_back(nuevoTurno);
+}
+
+vector<Turno> Hospital::getTurnos() {
+    return this->turnos;
+}

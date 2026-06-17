@@ -246,3 +246,78 @@ void SistemaHospitalario::buscarPorEspecialidad(string especialidad) {
     }
 }
 
+//B.1
+
+void SistemaHospitalario::agregarTurnoAHospital(string codigoHospital, Turno nuevoTurno) {
+    int indice = obtenerIndice(codigoHospital);
+
+    if (indice != -1) {
+        this->listaHospitales[indice].registrarTurno(nuevoTurno);
+    } else {
+        cout << "Error: El hospital con codigo " << codigoHospital << " no existe. No se pudo cargar el turno." << endl;
+    }
+}
+
+int SistemaHospitalario::calcularPacientesAtendidos(string codigoHospital, int fechaDesde, int fechaHasta) {
+    int indice = obtenerIndice(codigoHospital);
+
+    if (indice == -1) {
+        cout << "Error: El hospital con codigo " << codigoHospital << " no existe." << endl;
+        return 0;
+    }
+    
+    vector<Turno> turnosHospital = this->listaHospitales[indice].getTurnos();
+    int totalPacientes = 0;
+
+    for (int i = 0; i < turnosHospital.size(); i++) {
+        Turno t = turnosHospital[i];
+
+        if (t.getFecha() >= fechaDesde && t.getFecha() <= fechaHasta) {
+            totalPacientes++;
+        }
+    }
+
+    return totalPacientes;
+}
+
+
+//B.3
+void SistemaHospitalario::buscarTurnosPorDNI(int dni) {
+    int idBuscado = -1;
+
+    for (int i = 0; i < this->listaPacientes.size(); i++) {
+        if (this->listaPacientes[i].getDni() == dni) {
+            idBuscado = this->listaPacientes[i].getIdPaciente();
+            break; 
+        }
+    }
+
+    if (idBuscado == -1) {
+        cout << "No se encontro ningun paciente con el DNI: " << dni << endl;
+        return;
+    }
+
+    cout << "--- TURNOS ASIGNADOS PARA EL PACIENTE (DNI: " << dni << ") ---" << endl;
+    bool tieneTurnos = false;
+
+    for (int i = 0; i < this->listaHospitales.size(); i++) {
+        vector<Turno> turnosHospital = this->listaHospitales[i].getTurnos();
+
+        for (int j = 0; j < turnosHospital.size(); j++) {
+            Turno t = turnosHospital[j];
+
+            if (t.getIdPaciente() == idBuscado) {
+                tieneTurnos = true;
+                cout << "Hospital: " << this->listaHospitales[i].getCodigo() << " | Fecha: " << t.getFecha() << " | Medico ID: " << t.getIdMedico() << endl;
+            }
+        }
+    }
+
+    if (!tieneTurnos) {
+        cout << "El paciente no tiene turnos registrados en ningun hospital." << endl;
+    }
+}
+
+void SistemaHospitalario::registrarPaciente(Paciente nuevoPaciente) {
+    this->listaPacientes.push_back(nuevoPaciente);
+}

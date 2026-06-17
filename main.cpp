@@ -43,7 +43,6 @@ int main()
         cout << "Error: No se pudo abrir el archivo de hospitales.\n";
     }
 
-
     // Lectura derivacion
     ifstream archDerivacion("datos/derivaciones.txt");
 
@@ -52,7 +51,7 @@ int main()
         string origen, destino;
         int tiempo;
 
-        while (archDerivacion>> origen >> destino >> tiempo)
+        while (archDerivacion >> origen >> destino >> tiempo)
         {
 
             Derivacion nuevaDeri(origen, destino, tiempo);
@@ -67,8 +66,54 @@ int main()
         cout << "Error: No se pudo abrir el archivo de derivaciones.\n";
     }
 
+    // Lectura de turnos
+    ifstream archTurnos("datos/turnos.txt");
 
+    if (archTurnos.is_open())
+    {
+        string codigoHospital, especialidad;
+        int idTurno, idPaciente, idMedico, fechaTurno, duracionMin;
 
+        while (archTurnos >> codigoHospital >> idTurno >> idPaciente >> idMedico >> fechaTurno >> especialidad >> duracionMin)
+        {
+            Turno nuevoTurno(idTurno, idPaciente, idMedico, fechaTurno, especialidad, duracionMin);
+            sistema.agregarTurnoAHospital(codigoHospital, nuevoTurno);
+        }
+
+        archTurnos.close();
+        cout << "Base de datos de Turnos cargada con exito.\n";
+    }
+    else
+    {
+        cout << "Error: No se pudo abrir el archivo de turnos.\n";
+    }
+
+    // Lectura de pacientes
+    ifstream archPacientes("datos/pacientes.txt");
+
+    if (archPacientes.is_open())
+    {
+        string codigoHospital, diagnostico;
+        int idPaciente, dni, fechaIngreso, prioridad;
+        float pesoKg;
+
+        // Sigue el orden exacto: codigo_hospital paciente_id dni fecha_ingreso diagnostico prioridad peso_kg
+        while (archPacientes >> codigoHospital >> idPaciente >> dni >> fechaIngreso >> diagnostico >> prioridad >> pesoKg)
+        {
+            // Creamos el objeto Paciente con el nuevo constructor
+            Paciente nuevoPaciente(codigoHospital, idPaciente, dni, fechaIngreso, diagnostico, prioridad, pesoKg);
+
+            // Lo guardamos en la lista general del sistema
+            sistema.registrarPaciente(nuevoPaciente);
+        }
+
+        archPacientes.close();
+        cout << "Base de datos de Pacientes cargada con exito.\n";
+    }
+    else
+    {
+        cout << "Error: No se pudo abrir el archivo de pacientes.\n";
+    }
 
     // Interfaz para el usuario
 
@@ -76,175 +121,213 @@ int main()
     int opcionSistema;
     do
 
-    { 
-        cout<<"\n===== SISTEMA HOSPITALARIO ====="<<endl;
+    {
+        cout << "\n===== SISTEMA HOSPITALARIO =====" << endl;
         cout << "1 - Gestion de Hospitales" << endl;
         cout << "2 - Gestion de Pacientes y Turnos" << endl;
         cout << "0 - Salir del sistema" << endl;
         cout << "Ingrese una opcion: ";
         cin >> opcionSistema;
-    
-        switch(opcionSistema) {
 
-            case 1: {
-                int opcionHospital;
-                do {
-                    cout << "===== GESTION DE HOSPITALES =====" << endl;
-                    cout << "1 - Mostrar informacion de un hospital dado su codigo" << endl;
-                    cout << "2 - Agregar un nuevo hospital al sistema" << endl;
-                    cout << "3 - Eliminar un hospital del sistema" << endl;
-                    cout << "4. Listar hospitales ordenados (camas, personal o presupuesto)" << endl;
-                    cout << "5. Calcular lista mas rapida entre dos hospitales"<<endl;
-                    cout << "6. Buscar hospitales por especialidad ordenados por capacidad de camas."<< endl;
-                    cout << "0 - Volver al menu del sistema hospitalario" << endl;
-                    cin>> opcionHospital;
+        switch (opcionSistema)
+        {
 
-                    switch (opcionHospital) {
-                        case 1: {
-                            string codigo;
-                            cout << "Ingrese el codigo del hospital del cual desea informacion" << endl;
-                            cin >> codigo;
-                            sistema.mostrarInformacionDeHospital(codigo);
-                            volverAlMenu();
-                            break;
-                        }
-        
-                        case 2: {
-                            string codigo, nombre, ciudad, especialidades;
-                            int capacidadCamas, personalMedico, presupuestoAnual;
+        case 1:
+        {
+            int opcionHospital;
+            do
+            {
+                cout << "===== GESTION DE HOSPITALES =====" << endl;
+                cout << "1 - Mostrar informacion de un hospital dado su codigo" << endl;
+                cout << "2 - Agregar un nuevo hospital al sistema" << endl;
+                cout << "3 - Eliminar un hospital del sistema" << endl;
+                cout << "4. Listar hospitales ordenados (camas, personal o presupuesto)" << endl;
+                cout << "5. Calcular lista mas rapida entre dos hospitales" << endl;
+                cout << "6. Buscar hospitales por especialidad ordenados por capacidad de camas." << endl;
+                cout << "0 - Volver al menu del sistema hospitalario" << endl;
+                cin >> opcionHospital;
 
-                            cout << "--- REGISTRAR NUEVO HOSPITAL ---" << endl;
+                switch (opcionHospital)
+                {
+                case 1:
+                {
+                    string codigo;
+                    cout << "Ingrese el codigo del hospital del cual desea informacion" << endl;
+                    cin >> codigo;
+                    sistema.mostrarInformacionDeHospital(codigo);
+                    volverAlMenu();
+                    break;
+                }
 
-                            cout << "Ingrese el codigo: ";
-                            cin >> codigo;
+                case 2:
+                {
+                    string codigo, nombre, ciudad, especialidades;
+                    int capacidadCamas, personalMedico, presupuestoAnual;
 
-                            cout << "Ingrese el nombre: ";
-                            cin >> nombre;
+                    cout << "--- REGISTRAR NUEVO HOSPITAL ---" << endl;
 
-                            cout << "Ingrese la ciudad: ";
-                            cin >> ciudad;
+                    cout << "Ingrese el codigo: ";
+                    cin >> codigo;
 
-                            cout << "Ingrese la capacidad de camas: ";
-                            cin >> capacidadCamas;
+                    cout << "Ingrese el nombre: ";
+                    cin >> nombre;
 
-                            cout << "Ingrese las especialidades: ";
-                            cin >> especialidades;
+                    cout << "Ingrese la ciudad: ";
+                    cin >> ciudad;
 
-                            cout << "Ingrese la cantidad de personal medico: ";
-                            cin >> personalMedico;
+                    cout << "Ingrese la capacidad de camas: ";
+                    cin >> capacidadCamas;
 
-                            cout << "Ingrese el presupuesto anual: ";
-                            cin >> presupuestoAnual;
+                    cout << "Ingrese las especialidades: ";
+                    cin >> especialidades;
 
-                            Hospital nuevoHospital(codigo, nombre, ciudad, capacidadCamas, especialidades, personalMedico, presupuestoAnual);
+                    cout << "Ingrese la cantidad de personal medico: ";
+                    cin >> personalMedico;
 
-                            sistema.registrarHospital(nuevoHospital);
+                    cout << "Ingrese el presupuesto anual: ";
+                    cin >> presupuestoAnual;
 
-                            cout << "Hospital registrado correctamente" << endl;
+                    Hospital nuevoHospital(codigo, nombre, ciudad, capacidadCamas, especialidades, personalMedico, presupuestoAnual);
 
-                            volverAlMenu();
-                            break;
-                        }
-                        case 3: {
-                            cout << "--- ELIMINAR HOSPITAL ---" << endl;
-                        string codigo;
-                        cout << "Ingrese el codigo: ";
-                        cin >> codigo;
-                        int indice = sistema.obtenerIndice(codigo);
-                        sistema.eliminarHospital(codigo);
+                    sistema.registrarHospital(nuevoHospital);
 
-                        cout << "Hospital eliminado correctamente" << endl;
-                        volverAlMenu();
-                        break;
+                    cout << "Hospital registrado correctamente" << endl;
 
-                        //FALTO reasignar sus pacientes activos al hospital más cercano disponible
-                        }
-                        case 4: {
-                            int criterio;
-                            cout<<"Ingrese 1 para odernar por camas, 2 por personal medico, 3 por presupuesto anual : "<<endl;
-                            cin>>criterio;
-                            vector<Hospital> ordenados = sistema.listarHospitales(criterio);
-                            for (size_t i = 0; i < ordenados.size(); i++)
-                            {
-                                cout << i + 1 << ". Codigo: " << ordenados[i].getCodigo();
-                                cout << " | Camas: " << ordenados[i].getCapacidad();
-                                cout<< " | Personal: " << ordenados[i].getPersonal();
-                                cout<< " | Presupuesto: $" << ordenados[i].getPresupuesto() << endl;
-                            }
-                            
-                        }
-                        case 5: {
-                            string origen,destino;
-                            cout<<"Ingrese el codigo del hopital origen : "<<endl;
-                            cin>>origen;
-                            cout<<"Ingrese el codigo del hopital destino : "<<endl;
-                            cin>>destino;
-                            sistema.calcularRutaMasRapida(origen,destino);
-                        }
-                        case 6: {
-                            string especialidad;
-                            cout<<"Ingrese la especialidad buscada"<<endl;
-                            cin>>especialidad;
-                            sistema.buscarPorEspecialidad(especialidad);
-                        }
-                        case 0:
-                            cout << "Volviendo al menu del sistema hospitalario" << endl;
-                            break;
-                        }
-            } 
-            while (opcionHospital != 0);
+                    volverAlMenu();
+                    break;
+                }
+                case 3:
+                {
+                    cout << "--- ELIMINAR HOSPITAL ---" << endl;
+                    string codigo;
+                    cout << "Ingrese el codigo: ";
+                    cin >> codigo;
+                    int indice = sistema.obtenerIndice(codigo);
+                    sistema.eliminarHospital(codigo);
+
+                    cout << "Hospital eliminado correctamente" << endl;
+                    volverAlMenu();
+                    break;
+
+                    // FALTO reasignar sus pacientes activos al hospital más cercano disponible
+                }
+                case 4:
+                {
+                    int criterio;
+                    cout << "Ingrese 1 para odernar por camas, 2 por personal medico, 3 por presupuesto anual : " << endl;
+                    cin >> criterio;
+                    vector<Hospital> ordenados = sistema.listarHospitales(criterio);
+                    for (size_t i = 0; i < ordenados.size(); i++)
+                    {
+                        cout << i + 1 << ". Codigo: " << ordenados[i].getCodigo();
+                        cout << " | Camas: " << ordenados[i].getCapacidad();
+                        cout << " | Personal: " << ordenados[i].getPersonal();
+                        cout << " | Presupuesto: $" << ordenados[i].getPresupuesto() << endl;
+                    }
+                }
+                case 5:
+                {
+                    string origen, destino;
+                    cout << "Ingrese el codigo del hopital origen : " << endl;
+                    cin >> origen;
+                    cout << "Ingrese el codigo del hopital destino : " << endl;
+                    cin >> destino;
+                    sistema.calcularRutaMasRapida(origen, destino);
+                }
+                case 6:
+                {
+                    string especialidad;
+                    cout << "Ingrese la especialidad buscada" << endl;
+                    cin >> especialidad;
+                    sistema.buscarPorEspecialidad(especialidad);
+                }
+                case 0:
+                    cout << "Volviendo al menu del sistema hospitalario" << endl;
+                    break;
+                }
+            } while (opcionHospital != 0);
             break;
         }
-            case 2: {
-                int opcionPaciente;
-                do {
-                    cout << "\n--- GESTION DE PACIENTES Y TURNOS ---" << endl;
-                    cout << "1. Total pacientes atendidos por hospital/fecha" << endl;
-                    cout << "2. Detectar hospitales con sobrecarga" << endl;
-                    cout << "3. Buscar turnos de un paciente (DNI)" << endl;
-                    cout << "4. Gestionar lista de espera (Min-Heap)" << endl;
-                    cout << "5. Listar turnos de medico en orden cronologico" << endl;
-                    cout << "0. Volver al Menu del sistema hospitalario" << endl;
-                    cout << "Opcion: ";
-                    cin >> opcionPaciente;
+        case 2:
+        {
+            int opcionPaciente;
 
-                    switch (opcionPaciente) {
-                        case 1:
-                            
-                            volverAlMenu();
-                            break;
-                        case 2:
-                            
-                            volverAlMenu();
-                            break;
-                        case 3:
-                            
-                            volverAlMenu();
-                            break;
-                        case 4:
-                            
-                            volverAlMenu();
-                            break;
-                        case 5:
-                           
-                            volverAlMenu();
-                            break;
-                        case 0:
-                            cout << "Volviendo al menu del sistema hospitalario";
-                            break;
-                    }
-                } 
-                while (opcionPaciente != 0);
-                break; 
-            }
+            do
+            {
+                cout << "--- GESTION DE PACIENTES Y TURNOS ---" << endl;
+                cout << "1. Total pacientes atendidos por hospital/fecha" << endl;
+                cout << "2. Detectar hospitales con sobrecarga" << endl;
+                cout << "3. Buscar turnos de un paciente (DNI)" << endl;
+                cout << "4. Gestionar lista de espera (Min-Heap)" << endl;
+                cout << "5. Listar turnos de medico en orden cronologico" << endl;
+                cout << "0. Volver al Menu del sistema hospitalario" << endl;
+                cout << "Opcion: ";
+                cin >> opcionPaciente;
 
-            case 0:
-                cout << "Cerrando el sistema." << endl;
-                break;
-            default:
-                cout << "Opcion invalida. Intente de nuevo.\n";
+                switch (opcionPaciente)
+                {
+                case 1:
+                {
+                    string codHospital;
+                    int fDesde, fHasta, totalAtendidos;
+
+                    cout << "--- CALCULAR PACIENTES ATENDIDOS ---" << endl;
+                    cout << "Ingrese el codigo del hospital (ej. HGA): " << endl;
+                    cin >> codHospital;
+
+                    cout << "Ingrese la fecha de inicio (YYYYMMDD): " << endl;
+                    cin >> fDesde;
+
+                    cout << "Ingrese la fecha de fin (YYYYMMDD): " << endl;
+                    cin >> fHasta;
+
+                    totalAtendidos = sistema.calcularPacientesAtendidos(codHospital, fDesde, fHasta);
+
+                    cout << "Total de pacientes atendidos: " << totalAtendidos << endl;
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 2:
+
+                    volverAlMenu();
+                    break;
+                case 3:
+                {
+                    int dniBusqueda;
+                    cout << "--- BUSCAR TURNOS POR DNI ---" << endl;
+                    cout << "Ingrese el DNI del paciente: " << endl;
+                    cin >> dniBusqueda;
+
+                    cout << endl;
+                    sistema.buscarTurnosPorDNI(dniBusqueda);
+
+                    volverAlMenu();
+                    break;
+                }
+                case 4:
+
+                    volverAlMenu();
+                    break;
+                case 5:
+
+                    volverAlMenu();
+                    break;
+                case 0:
+                    cout << "Volviendo al menu del sistema hospitalario";
+                    break;
+                }
+            } while (opcionPaciente != 0);
+            break;
         }
-        
+
+        case 0:
+            cout << "Cerrando el sistema." << endl;
+            break;
+        default:
+            cout << "Opcion invalida. Intente de nuevo.\n";
+        }
 
     } while (opcionSistema != 0);
 

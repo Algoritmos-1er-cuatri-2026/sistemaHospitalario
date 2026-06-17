@@ -16,13 +16,14 @@ class SistemaHospitalario
 {
 private:
     vector<Hospital> listaHospitales;
-    vector<Paciente> pacientes;
+    vector<Paciente> listaPacientes;
     vector<Medico> medicos;
     vector<Derivacion> listaDerivaciones;
 
 public:
     void registrarDerivacion(Derivacion nuevaDerivacion);
-
+    void agregarTurnoAHospital(string codigoHospital, Turno nuevoTurno);
+    void registrarPaciente(Paciente nuevoPaciente);
     //lecturas de archivos ⬆
 
     void registrarHospital(Hospital nuevoHospital); // Punto A.2
@@ -32,7 +33,7 @@ public:
     void agregarDerivacion(Derivacion d); //Punto A.5
     void buscarPorEspecialidad(string especialidad); // Punto A.6
     bool tieneEspecialidad(int codigo, string especialidad);
-    int calcularPacientesAtendidos(int codigo, string fecha);
+    int calcularPacientesAtendidos(string codigoHospital, int fechaDesde, int fechaHasta); // Punto B.1
     void gestionarListaDeEspera(int codigo);
     vector<Hospital> ordenarPorDisponibilidad(Hospital hospital);
     vector<Hospital> detectarSobrecargaDePacientes(int cantidad);
@@ -42,7 +43,7 @@ public:
     Diagnostico mostrarDiagnosticoFrecuente();
     void eliminarDiagnostico(string nombre);
     bool detectarDesbalanceo();
-    vector<Turno> buscarTodosLosTurnos(int dni);
+    void buscarTurnosPorDNI(int dni);
     vector<Turno> listarTurnosCronologicamente(int idMedico);
     void calcularRutaMasRapida(string codigoOrigen, string codigoDestino); // A.5
     int obtenerIndice(string codigo); 

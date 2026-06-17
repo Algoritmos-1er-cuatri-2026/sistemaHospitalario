@@ -5,6 +5,7 @@
 #include <string>
 #include "Insumo.h"
 #include "Paciente.h"
+#include "Turno.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ private:
     int presupuestoAnual;
     vector<Insumo *> insumos;
     vector<Paciente *> pacientes;
+    vector<Turno> turnos;
 
 
 public:
@@ -35,6 +37,10 @@ public:
     int getPersonal();
     int getPresupuesto();
     void mostrarInformacion();
+
+    //B
+    void registrarTurno(Turno nuevoTurno);
+    vector<Turno> getTurnos();
 };
 
 #endif
