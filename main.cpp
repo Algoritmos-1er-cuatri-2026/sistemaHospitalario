@@ -36,11 +36,11 @@ int main()
         }
 
         archHospitales.close();
-        cout << "Base de datos de Hospitales cargada con exito.\n";
+        cout << "Base de datos de Hospitales cargada con exito." << endl;
     }
     else
     {
-        cout << "Error: No se pudo abrir el archivo de hospitales.\n";
+        cout << "Error: No se pudo abrir el archivo de hospitales." << endl;
     }
 
     // Lectura derivacion
@@ -59,11 +59,11 @@ int main()
         }
 
         archDerivacion.close();
-        cout << "Base de datos de derivaciones cargada con exito.\n";
+        cout << "Base de datos de derivaciones cargada con exito." << endl;
     }
     else
     {
-        cout << "Error: No se pudo abrir el archivo de derivaciones.\n";
+        cout << "Error: No se pudo abrir el archivo de derivaciones." << endl;
     }
 
     // Lectura de turnos
@@ -81,11 +81,11 @@ int main()
         }
 
         archTurnos.close();
-        cout << "Base de datos de Turnos cargada con exito.\n";
+        cout << "Base de datos de Turnos cargada con exito." << endl;
     }
     else
     {
-        cout << "Error: No se pudo abrir el archivo de turnos.\n";
+        cout << "Error: No se pudo abrir el archivo de turnos." << endl;
     }
 
     // Lectura de pacientes
@@ -97,22 +97,18 @@ int main()
         int idPaciente, dni, fechaIngreso, prioridad;
         float pesoKg;
 
-        // Sigue el orden exacto: codigo_hospital paciente_id dni fecha_ingreso diagnostico prioridad peso_kg
         while (archPacientes >> codigoHospital >> idPaciente >> dni >> fechaIngreso >> diagnostico >> prioridad >> pesoKg)
         {
-            // Creamos el objeto Paciente con el nuevo constructor
             Paciente nuevoPaciente(codigoHospital, idPaciente, dni, fechaIngreso, diagnostico, prioridad, pesoKg);
-
-            // Lo guardamos en la lista general del sistema
             sistema.registrarPaciente(nuevoPaciente);
         }
 
         archPacientes.close();
-        cout << "Base de datos de Pacientes cargada con exito.\n";
+        cout << "Base de datos de Pacientes cargada con exito." << endl;
     }
     else
     {
-        cout << "Error: No se pudo abrir el archivo de pacientes.\n";
+        cout << "Error: No se pudo abrir el archivo de pacientes." << endl;
     }
 
     // Interfaz para el usuario
@@ -122,7 +118,7 @@ int main()
     do
 
     {
-        cout << "\n===== SISTEMA HOSPITALARIO =====" << endl;
+        cout << "===== SISTEMA HOSPITALARIO =====" << endl;
         cout << "1 - Gestion de Hospitales" << endl;
         cout << "2 - Gestion de Pacientes y Turnos" << endl;
         cout << "0 - Salir del sistema" << endl;
@@ -290,9 +286,11 @@ int main()
                 }
 
                 case 2:
+                {
 
                     volverAlMenu();
                     break;
+                }
                 case 3:
                 {
                     int dniBusqueda;
@@ -302,6 +300,7 @@ int main()
 
                     cout << endl;
                     sistema.buscarTurnosPorDNI(dniBusqueda);
+                    //Ver si usar algun algoritmo de busqueda en lugar del secuencial usado
 
                     volverAlMenu();
                     break;
@@ -326,7 +325,7 @@ int main()
             cout << "Cerrando el sistema." << endl;
             break;
         default:
-            cout << "Opcion invalida. Intente de nuevo.\n";
+            cout << "Opcion invalida. Intente de nuevo." << endl;
         }
 
     } while (opcionSistema != 0);

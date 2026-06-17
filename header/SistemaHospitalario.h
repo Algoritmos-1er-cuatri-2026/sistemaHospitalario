@@ -24,28 +24,33 @@ public:
     void registrarDerivacion(Derivacion nuevaDerivacion);
     void agregarTurnoAHospital(string codigoHospital, Turno nuevoTurno);
     void registrarPaciente(Paciente nuevoPaciente);
-    //lecturas de archivos ⬆
 
+    //funciones usadas para lecturas de archivos ⬆
+
+    void mostrarInformacionDeHospital(string codigo); // Punto A.1
     void registrarHospital(Hospital nuevoHospital); // Punto A.2
     void eliminarHospital(string codigo); // Punto A.3 - falta reasignar pacientes
     vector<Hospital> listarHospitales(int filtro); // Punto A.4
-    void mostrarInformacionDeHospital(string codigo); // Punto A.1
+    void calcularRutaMasRapida(string codigoOrigen, string codigoDestino); // A.5    
     void agregarDerivacion(Derivacion d); //Punto A.5
     void buscarPorEspecialidad(string especialidad); // Punto A.6
-    bool tieneEspecialidad(int codigo, string especialidad);
+    bool tieneEspecialidad(int codigo, string especialidad); // Punto A.6
+
+    vector<Hospital> ordenarPorDisponibilidad(Hospital hospital); // A.6?
+
     int calcularPacientesAtendidos(string codigoHospital, int fechaDesde, int fechaHasta); // Punto B.1
-    void gestionarListaDeEspera(int codigo);
-    vector<Hospital> ordenarPorDisponibilidad(Hospital hospital);
-    vector<Hospital> detectarSobrecargaDePacientes(int cantidad);
-    void insertarDiagnostico(string nombre, int frecuencia);
-    void incrementarFrecuenciaDiagnostico(string nombre);
-    vector<Diagnostico> listarDiagnosticos();
-    Diagnostico mostrarDiagnosticoFrecuente();
-    void eliminarDiagnostico(string nombre);
-    bool detectarDesbalanceo();
-    void buscarTurnosPorDNI(int dni);
-    vector<Turno> listarTurnosCronologicamente(int idMedico);
-    void calcularRutaMasRapida(string codigoOrigen, string codigoDestino); // A.5
+    vector<Hospital> detectarSobrecargaDePacientes(int cantidad); // Punto B.2
+    void buscarTurnosPorDNI(int dni); // Punto B.3
+    void gestionarListaDeEspera(int codigo); // Punto B.4
+    void listarTurnosCronologicamente(int idMedico); // Punto B.5
+    
+    void insertarDiagnostico(string nombre, int frecuencia); // Punto C.1
+    void incrementarFrecuenciaDiagnostico(string nombre); // Punto C.2
+    vector<Diagnostico> listarDiagnosticos(); // Punto C.3
+    Diagnostico mostrarDiagnosticoFrecuente(); // Punto C.4
+    void eliminarDiagnostico(string nombre); // Punto C.5
+    bool detectarDesbalanceo(); // Punto C.6
+
     int obtenerIndice(string codigo); 
     vector<Hospital> mostrarLista();
 };

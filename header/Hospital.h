@@ -19,8 +19,8 @@ private:
     string especialidades;
     int personalMedico;
     int presupuestoAnual;
-    vector<Insumo *> insumos;
-    vector<Paciente *> pacientes;
+    vector<Insumo> insumos;
+    vector<Paciente> pacientes;
     vector<Turno> turnos;
 
 
