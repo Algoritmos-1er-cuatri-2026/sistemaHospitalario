@@ -36,6 +36,7 @@ int main()
         }
 
         archHospitales.close();
+        sistema.inicializarTablaHash();
         cout << "Base de datos de Hospitales cargada con exito." << endl;
     }
     else
@@ -198,7 +199,6 @@ int main()
                     string codigo;
                     cout << "Ingrese el codigo: ";
                     cin >> codigo;
-                    int indice = sistema.obtenerIndice(codigo);
                     sistema.eliminarHospital(codigo);
 
                     cout << "Hospital eliminado correctamente" << endl;
@@ -220,6 +220,7 @@ int main()
                         cout << " | Personal: " << ordenados[i].getPersonal();
                         cout << " | Presupuesto: $" << ordenados[i].getPresupuesto() << endl;
                     }
+                    break;
                 }
                 case 5:
                 {
@@ -229,6 +230,7 @@ int main()
                     cout << "Ingrese el codigo del hopital destino : " << endl;
                     cin >> destino;
                     sistema.calcularRutaMasRapida(origen, destino);
+                    break;
                 }
                 case 6:
                 {
@@ -236,6 +238,7 @@ int main()
                     cout << "Ingrese la especialidad buscada" << endl;
                     cin >> especialidad;
                     sistema.buscarPorEspecialidad(especialidad);
+                    break;
                 }
                 case 0:
                     cout << "Volviendo al menu del sistema hospitalario" << endl;

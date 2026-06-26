@@ -6,7 +6,7 @@ using namespace std;
 
 
 void SistemaHospitalario::mostrarInformacionDeHospital(string codigo) { //PUNTO 1.
-    for(int i = 0; i < listaHospitales.size(); i++) {
+    for(size_t i = 0; i < listaHospitales.size(); i++) {
         if (this->listaHospitales[i].getCodigo() == codigo){
             listaHospitales[i].mostrarInformacion();
             return;
@@ -17,6 +17,7 @@ void SistemaHospitalario::mostrarInformacionDeHospital(string codigo) { //PUNTO 
 
 void SistemaHospitalario::registrarHospital(Hospital nuevoHospital) {
     this->listaHospitales.push_back(nuevoHospital);
+    inicializarTablaHash();
 }
 
 void SistemaHospitalario::eliminarHospital(string codigo) {
@@ -26,17 +27,82 @@ void SistemaHospitalario::eliminarHospital(string codigo) {
         cout << "Error: El hospital con codigo " << codigo << " no existe." << endl;
         return;
     }
-
     this->listaHospitales.erase(this->listaHospitales.begin() + indice);
+    inicializarTablaHash();
+
 }
 
 void SistemaHospitalario::registrarDerivacion(Derivacion nuevaDerivacion) {
     this->listaDerivaciones.push_back(nuevaDerivacion);
 }
 
+
+//HASH
+
+bool SistemaHospitalario::esPrimo(int numero) {
+    if (numero <= 1) return false;
+    for (int i = 2; i * i <= numero; i++) {
+        if (numero % i == 0) return false;
+    }
+    return true;
+}
+
+int SistemaHospitalario::proximoPrimo(int numero) {
+    while (!esPrimo(numero)) {
+        numero++;
+    }
+    return numero;
+}
+
+
+int SistemaHospitalario::calcularHash(string codigo) {
+    int sumaAscii = 0;
+    
+    for (size_t i = 0; i < codigo.length(); i++) {
+        sumaAscii += codigo[i];
+    }
+    
+    return sumaAscii % this->tamanoTablaHash;
+}
+
+void SistemaHospitalario::inicializarTablaHash() {
+    size_t cantidadElementos = this->listaHospitales.size();
+    if (cantidadElementos == 0) {
+        this->tamanoTablaHash = 0;
+        this->tablaHash.clear();
+        return;
+    }
+
+    this->tamanoTablaHash = proximoPrimo(cantidadElementos / 0.8);
+
+    this->tablaHash.clear();
+    this->tablaHash.resize(this->tamanoTablaHash, NodoHash()); 
+
+    for (size_t i = 0; i < cantidadElementos; i++) {
+        string cod = this->listaHospitales[i].getCodigo();
+        int pos = calcularHash(cod);
+
+        // Elegimos linear probing ante casos de colisiones
+        while(this->tablaHash[pos].estado == OCUPADO) {
+            pos = (pos + 1) % this->tamanoTablaHash;
+        }
+
+        this->tablaHash[pos].codigo = cod;
+        this->tablaHash[pos].indiceVector = i;
+        this->tablaHash[pos].estado = OCUPADO;
+    }
+}
+
 int SistemaHospitalario::obtenerIndice(string codigo) {
-    for (size_t i = 0; i < this->listaHospitales.size(); i++) { 
-        if (this->listaHospitales[i].getCodigo() == codigo) return i;
+    int posicion = calcularHash(codigo);
+    int posicionInicial = posicion;
+
+    while (this->tablaHash[posicion].estado != LIBRE) {
+        if (this->tablaHash[posicion].codigo == codigo) {
+            return this->tablaHash[posicion].indiceVector;
+        }
+        posicion = (posicion + 1) % this->tamanoTablaHash;
+        if (posicion == posicionInicial) break; 
     }
     return -1; 
 }
@@ -116,7 +182,7 @@ void SistemaHospitalario::calcularRutaMasRapida(string origen, string destino) {
     vector<int>(listaHospitales.size(), 99999)
     );
 
-    for(int i = 0; i < listaHospitales.size(); i++) {
+    for(size_t i = 0; i < listaHospitales.size(); i++) {
     grafo[i][i] = 0;
     }
 
@@ -132,9 +198,9 @@ void SistemaHospitalario::calcularRutaMasRapida(string origen, string destino) {
 
 cout << "Grafo de derivaciones";
 
-for(int i = 0; i < grafo.size(); i++)
+for(size_t i = 0; i < grafo.size(); i++)
 {
-    for(int j = 0; j < grafo[i].size(); j++)
+    for(size_t j = 0; j < grafo[i].size(); j++)
     {
         cout << grafo[i][j] <<"\t";
     }
@@ -142,7 +208,6 @@ for(int i = 0; i < grafo.size(); i++)
 }
 
 //Implementación dijkstra:
-
 
 cout<<"Calculando ruta entre "<<origen<<" y "<<destino<<endl;
 
@@ -269,7 +334,7 @@ int SistemaHospitalario::calcularPacientesAtendidos(string codigoHospital, int f
     vector<Turno> turnosHospital = this->listaHospitales[indice].getTurnos();
     int totalPacientes = 0;
 
-    for (int i = 0; i < turnosHospital.size(); i++) {
+    for (size_t i = 0; i < turnosHospital.size(); i++) {
         Turno t = turnosHospital[i];
 
         if (t.getFecha() >= fechaDesde && t.getFecha() <= fechaHasta) {
@@ -285,7 +350,7 @@ int SistemaHospitalario::calcularPacientesAtendidos(string codigoHospital, int f
 void SistemaHospitalario::buscarTurnosPorDNI(int dni) {
     int idBuscado = -1;
 
-    for (int i = 0; i < this->listaPacientes.size(); i++) {
+    for (size_t i = 0; i < this->listaPacientes.size(); i++) {
         if (this->listaPacientes[i].getDni() == dni) {
             idBuscado = this->listaPacientes[i].getIdPaciente();
             break; 
@@ -300,10 +365,10 @@ void SistemaHospitalario::buscarTurnosPorDNI(int dni) {
     cout << "--- TURNOS ASIGNADOS PARA EL PACIENTE (DNI: " << dni << ") ---" << endl;
     bool tieneTurnos = false;
 
-    for (int i = 0; i < this->listaHospitales.size(); i++) {
+    for (size_t i = 0; i < this->listaHospitales.size(); i++) {
         vector<Turno> turnosHospital = this->listaHospitales[i].getTurnos();
 
-        for (int j = 0; j < turnosHospital.size(); j++) {
+        for (size_t j = 0; j < turnosHospital.size(); j++) {
             Turno t = turnosHospital[j];
 
             if (t.getIdPaciente() == idBuscado) {

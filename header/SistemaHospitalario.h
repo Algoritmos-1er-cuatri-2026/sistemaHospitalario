@@ -12,6 +12,22 @@
 #include <string>
 using namespace std;
 
+enum EstadoHash { LIBRE, OCUPADO }; 
+
+struct NodoHash {
+    string codigo;
+    int indiceVector;
+    EstadoHash estado;
+
+    NodoHash() {
+        codigo = "";
+        indiceVector = -1;
+        estado = LIBRE;
+    }
+};
+
+
+
 class SistemaHospitalario
 {
 private:
@@ -19,7 +35,13 @@ private:
     vector<Paciente> listaPacientes;
     vector<Medico> medicos;
     vector<Derivacion> listaDerivaciones;
-
+    
+    vector<NodoHash> tablaHash;
+    int tamanoTablaHash;
+    bool esPrimo(int numero);
+    int proximoPrimo(int numero);
+    int calcularHash(string codigo);
+    
 public:
     void registrarDerivacion(Derivacion nuevaDerivacion);
     void agregarTurnoAHospital(string codigoHospital, Turno nuevoTurno);
@@ -35,7 +57,8 @@ public:
     void agregarDerivacion(Derivacion d); //Punto A.5
     void buscarPorEspecialidad(string especialidad); // Punto A.6
     bool tieneEspecialidad(int codigo, string especialidad); // Punto A.6
-
+    void inicializarTablaHash();
+    void insertarEnHash(string codigo, int indice);
     vector<Hospital> ordenarPorDisponibilidad(Hospital hospital); // A.6?
 
     int calcularPacientesAtendidos(string codigoHospital, int fechaDesde, int fechaHasta); // Punto B.1
