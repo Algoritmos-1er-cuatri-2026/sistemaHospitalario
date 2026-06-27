@@ -20,6 +20,33 @@ void SistemaHospitalario::registrarHospital(Hospital nuevoHospital) {
     inicializarTablaHash();
 }
 
+string SistemaHospitalario::obtenerHospitalMasCercano(string codigoOrigen) {
+    int indiceOrigen = obtenerIndice(codigoOrigen);
+    if (indiceOrigen == -1) return "";
+    int cantidadHospitales = listaHospitales.size();
+    vector<vector<int>> grafo = this->construirGrafoMatriz();
+
+    vector<int> distancia;
+    vector<int> padre;
+    ejecutarDijkstra(indiceOrigen, grafo, distancia, padre);
+
+    const int INF = 99999;
+    int menorTiempo = INF;
+    int indiceMasCercano = -1;
+
+    for (int i = 0; i < cantidadHospitales; i++) {
+        if (i != indiceOrigen && distancia[i] > 0 && distancia[i] < menorTiempo) {
+            menorTiempo = distancia[i];
+            indiceMasCercano = i;
+        }
+    }
+
+    if (indiceMasCercano != -1) {
+        return listaHospitales[indiceMasCercano].getCodigo();
+    }
+    return "";
+}
+
 void SistemaHospitalario::eliminarHospital(string codigo) {
     int indice = obtenerIndice(codigo);
 
@@ -27,9 +54,31 @@ void SistemaHospitalario::eliminarHospital(string codigo) {
         cout << "Error: El hospital con codigo " << codigo << " no existe." << endl;
         return;
     }
+
+    string codigoMasCercano = obtenerHospitalMasCercano(codigo);
+    if (codigoMasCercano != "") {
+        cout << "Derivando pacientes desde " << codigo<< " hasta " << codigoMasCercano << endl;
+
+        for (size_t i = 0; i < this->listaPacientes.size(); i++) {
+            if (this->listaPacientes[i].getCodHospital() == codigo) {
+                this->listaPacientes[i].setCodHospital(codigoMasCercano);
+            }
+        }  
+}
     this->listaHospitales.erase(this->listaHospitales.begin() + indice);
     inicializarTablaHash();
+}
 
+void SistemaHospitalario::mostrarPacientes() {
+   for (size_t i = 0; i < this->listaPacientes.size(); i++) {
+        cout << "Hospital: " << this->listaPacientes[i].getCodHospital() 
+             << " | ID Paciente: " << this->listaPacientes[i].getIdPaciente() 
+             << " | DNI: " << this->listaPacientes[i].getDni()
+             << " | Fecha de ingreso: " << this->listaPacientes[i].getFechaIngreso()
+             << " | Diagnostico: " << this->listaPacientes[i].getDiagnostico()
+             << " | Prioridad: " << this->listaPacientes[i].getPrioridad()
+             << " | Peso en KG: " << this->listaPacientes[i].getKg()<<endl;
+    }
 }
 
 void SistemaHospitalario::registrarDerivacion(Derivacion nuevaDerivacion) {
@@ -162,68 +211,46 @@ vector<Hospital> SistemaHospitalario::listarHospitales(int criterio) {
     return listaOrdenada;
 }
 
-// EJERCICIO DERIVACIÓN CON DIJKSTRA: 
+// DIJKSTRA
+
 
 void SistemaHospitalario::agregarDerivacion(Derivacion d) {
     this->listaDerivaciones.push_back(d);
 }
 
-void SistemaHospitalario::calcularRutaMasRapida(string origen, string destino) {
-    int indiceOrigen = obtenerIndice(origen);
-    int indiceDestino = obtenerIndice(destino);
-    
-    if (indiceOrigen == -1 || indiceDestino == -1) {
-        cout << "Error: Hospital no valido" << endl;
-        return;
-    }
-    
+vector<vector<int>> SistemaHospitalario::construirGrafoMatriz() {
     vector<vector<int>> grafo(
-    listaHospitales.size(),
-    vector<int>(listaHospitales.size(), 99999)
+        listaHospitales.size(),
+        vector<int>(listaHospitales.size(), 99999)
     );
 
     for(size_t i = 0; i < listaHospitales.size(); i++) {
-    grafo[i][i] = 0;
+        grafo[i][i] = 0;
     }
 
     for (Derivacion d : this->listaDerivaciones) {
-    int DerOrigen = obtenerIndice(d.getOrigen());
-    int DerDestino = obtenerIndice(d.getDestino());
+        int DerOrigen = obtenerIndice(d.getOrigen());
+        int DerDestino = obtenerIndice(d.getDestino());
 
-    if(DerOrigen != -1 && DerDestino != -1) {
-        grafo[DerOrigen][DerDestino] = d.getTiempo();
-        grafo[DerDestino][DerOrigen] = d.getTiempo();
+        if(DerOrigen != -1 && DerDestino != -1) {
+            grafo[DerOrigen][DerDestino] = d.getTiempo();
+            grafo[DerDestino][DerOrigen] = d.getTiempo();
+        }
     }
+    return grafo;
 }
 
-cout << "Grafo de derivaciones";
+void SistemaHospitalario::ejecutarDijkstra(int indiceOrigen, const vector<vector<int>>& grafo, vector<int>& distancia, vector<int>& padre) {
+    const int INF = 99999;
+    int n = grafo.size();
 
-for(size_t i = 0; i < grafo.size(); i++)
-{
-    for(size_t j = 0; j < grafo[i].size(); j++)
-    {
-        cout << grafo[i][j] <<"\t";
-    }
-    cout << endl;
-}
+    distancia.assign(n, INF);
+    padre.assign(n, -1);
+    vector<bool> visitado(n, false); 
 
-//Implementación dijkstra:
-
-cout<<"Calculando ruta entre "<<origen<<" y "<<destino<<endl;
-
-const int INF = 99999;
-    int n = listaHospitales.size();
-
-    vector<int> distancia(n, INF);
-    vector<bool> visitado(n, false);
-    vector<int> padre(n, -1); 
-
-   
     distancia[indiceOrigen] = 0;
 
-    
     for (int i = 0; i < n - 1; i++) {
-        
         int min_distancia = INF;
         int u = -1;
 
@@ -234,37 +261,53 @@ const int INF = 99999;
             }
         }
 
-        
         if (u == -1 || distancia[u] == INF) {
             break;
         }
 
-        
         visitado[u] = true;
 
-        
-        if (u == indiceDestino) {
-            break;
-        }
-
-       
         for (int v = 0; v < n; v++) {
-            
             if (!visitado[v] && grafo[u][v] != INF && distancia[u] + grafo[u][v] < distancia[v]) {
                 distancia[v] = distancia[u] + grafo[u][v];
                 padre[v] = u; 
             }
         }
     }
+}
 
-   
+void SistemaHospitalario::calcularRutaMasRapida(string origen, string destino) {
+    int indiceOrigen = obtenerIndice(origen);
+    int indiceDestino = obtenerIndice(destino);
+    
+    if (indiceOrigen == -1 || indiceDestino == -1) {
+        cout << "Error: Hospital no valido" << endl;
+        return;
+    }
+
+    vector<vector<int>> grafo = construirGrafoMatriz();
+
+    cout << "Grafo de derivaciones" << endl;
+    for(size_t i = 0; i < grafo.size(); i++) {
+        for(size_t j = 0; j < grafo[i].size(); j++) {
+            cout << grafo[i][j] << "\t";
+        }
+        cout << endl;
+    }
+
+    cout << "Calculando ruta entre " << origen << " y " << destino << endl;
+
+    vector<int> distancia;
+    vector<int> padre;
+    ejecutarDijkstra(indiceOrigen, grafo, distancia, padre);
+
+    const int INF = 99999;
     if (distancia[indiceDestino] == INF) {
         cout << "No existe una ruta de derivación disponible entre " << origen << " y " << destino << "." << endl;
     } else {
         cout << "\n Camino minimo encontrado: " << endl;
         cout << "Tiempo total de traslado: " << distancia[indiceDestino] << " minutos." << endl;
 
-        
         vector<int> camino;
         int actual = indiceDestino;
         while (actual != -1) {
@@ -272,7 +315,6 @@ const int INF = 99999;
             actual = padre[actual];
         }
 
-        
         cout << "Ruta a seguir: ";
         for (int i = camino.size() - 1; i >= 0; i--) {
             int idx = camino[i];

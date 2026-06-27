@@ -32,6 +32,7 @@ public:
     void gestionarListaDeEspera();
     string getCodigo();
     string getCiudad();
+    string getNombre();
     int getCapacidad();
     string getEspecialidades();
     int getPersonal();

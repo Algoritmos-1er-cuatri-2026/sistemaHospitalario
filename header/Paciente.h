@@ -19,6 +19,12 @@ public:
     Paciente(string hosp, int id, int dni, int fecha, string diag, int prio, float peso);
     int getIdPaciente();
     int getDni();
+    string getCodHospital();
+    void setCodHospital(string codigo);
+    int getFechaIngreso();
+    string getDiagnostico();
+    int getPrioridad();
+    float getKg();
 };
 
 #endif

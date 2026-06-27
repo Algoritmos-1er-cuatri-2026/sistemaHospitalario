@@ -51,14 +51,23 @@ public:
 
     void mostrarInformacionDeHospital(string codigo); // Punto A.1
     void registrarHospital(Hospital nuevoHospital); // Punto A.2
-    void eliminarHospital(string codigo); // Punto A.3 - falta reasignar pacientes
+    void eliminarHospital(string codigo); // Punto A.3 
+    string obtenerHospitalMasCercano(string codigoOrigen); // Punto A.3
+
+    void mostrarPacientes();
     vector<Hospital> listarHospitales(int filtro); // Punto A.4
+
     void calcularRutaMasRapida(string codigoOrigen, string codigoDestino); // A.5    
     void agregarDerivacion(Derivacion d); //Punto A.5
+    void ejecutarDijkstra(int indiceOrigen, const std::vector<std::vector<int>>& grafo, std::vector<int>& distancia, std::vector<int>& padre);// A.5
+    vector<vector<int>> construirGrafoMatriz(); // Punto A.5
+
     void buscarPorEspecialidad(string especialidad); // Punto A.6
     bool tieneEspecialidad(int codigo, string especialidad); // Punto A.6
-    void inicializarTablaHash();
-    void insertarEnHash(string codigo, int indice);
+
+    void inicializarTablaHash(); //PUNTO A HASH
+    void insertarEnHash(string codigo, int indice); // PUNTO A HASH
+
     vector<Hospital> ordenarPorDisponibilidad(Hospital hospital); // A.6?
 
     int calcularPacientesAtendidos(string codigoHospital, int fechaDesde, int fechaHasta); // Punto B.1

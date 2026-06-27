@@ -4,6 +4,7 @@
 #include "header/SistemaHospitalario.h"
 #include "header/Hospital.h"
 #include "header/Derivacion.h"
+#include "header/Paciente.h"
 
 using namespace std;
 
@@ -199,13 +200,15 @@ int main()
                     string codigo;
                     cout << "Ingrese el codigo: ";
                     cin >> codigo;
+                    cout<<"Se listaran los pacientes: "<<endl;
+                    sistema.mostrarPacientes();
                     sistema.eliminarHospital(codigo);
 
                     cout << "Hospital eliminado correctamente" << endl;
+                    cout<<"Listando pacientes nuevamente, los asociados al hospital eliminado se derivaron al hospital mas cercano"<<endl;
+                    sistema.mostrarPacientes();
                     volverAlMenu();
                     break;
-
-                    // FALTO reasignar sus pacientes activos al hospital más cercano disponible
                 }
                 case 4:
                 {

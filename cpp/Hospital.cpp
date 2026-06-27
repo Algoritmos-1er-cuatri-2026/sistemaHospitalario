@@ -21,6 +21,10 @@ string Hospital::getCiudad(){
     return this->ciudad;
 }
 
+string Hospital::getNombre(){
+    return this->nombre;
+}
+
 int Hospital::getCapacidad(){
     return this->capacidadCamas;
   }
