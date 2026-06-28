@@ -573,3 +573,8 @@ int SistemaHospitalario::alturaArbolDiagnosticos()
 {
     return arbolDiagnosticos.altura();
 }
+
+void SistemaHospitalario::mostrarArbolDiagnosticos()
+{
+    arbolDiagnosticos.mostrarArbol();
+}

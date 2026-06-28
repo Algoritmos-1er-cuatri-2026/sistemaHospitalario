@@ -342,6 +342,7 @@ int main()
                 cout << "5 - Eliminar diagnostico" << endl;
                 cout << "6 - Mostrar altura del arbol" << endl;
                 cout << "7 - Detectar desbalanceo" << endl;
+                cout << "8 - Mostrar arbol" << endl;
                 cout << "0 - Volver al menu principal" << endl;
                 cout << "Ingrese una opcion: ";
                 cin >> opcionDiagnostico;
@@ -441,6 +442,16 @@ int main()
                     {
                         cout << "El arbol no esta desbalanceado." << endl;
                     }
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 8:
+                {
+                    cout << "--- ARBOL DE DIAGNOSTICOS ---" << endl;
+
+                    sistema.mostrarArbolDiagnosticos();
 
                     volverAlMenu();
                     break;

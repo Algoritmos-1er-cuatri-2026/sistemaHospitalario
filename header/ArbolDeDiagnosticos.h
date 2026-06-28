@@ -29,6 +29,10 @@ private:
 
     Diagnostico* extraerMinimo(Diagnostico* actual, Diagnostico*& minimoExtraido);
 
+    void mostrarArbolRec(Diagnostico* actual,
+                     string prefijo,
+                     string lado);
+
 public:
     ArbolDeDiagnosticos();
 
@@ -49,6 +53,8 @@ public:
     int altura();
 
     bool estaDesbalanceado();
+
+    void mostrarArbol();
 };
 
 #endif

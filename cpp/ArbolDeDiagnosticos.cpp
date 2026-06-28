@@ -13,7 +13,7 @@ bool ArbolDeDiagnosticos::estaVacio()
     return raiz == nullptr;
 }
 
-bool ArbolDeDiagnosticos::esMenor(Diagnostico* primero, Diagnostico* segundo)
+bool ArbolDeDiagnosticos::esMenor(Diagnostico *primero, Diagnostico *segundo)
 {
     if (primero->getFrecuencia() < segundo->getFrecuencia())
         return true;
@@ -24,7 +24,7 @@ bool ArbolDeDiagnosticos::esMenor(Diagnostico* primero, Diagnostico* segundo)
     return primero->getNombre() < segundo->getNombre();
 }
 
-void ArbolDeDiagnosticos::insertar(Diagnostico* diagnostico)
+void ArbolDeDiagnosticos::insertar(Diagnostico *diagnostico)
 {
     if (diagnostico == nullptr)
         return;
@@ -35,7 +35,7 @@ void ArbolDeDiagnosticos::insertar(Diagnostico* diagnostico)
     raiz = insertarRec(raiz, diagnostico);
 }
 
-Diagnostico* ArbolDeDiagnosticos::insertarRec(Diagnostico* actual, Diagnostico* nuevo)
+Diagnostico *ArbolDeDiagnosticos::insertarRec(Diagnostico *actual, Diagnostico *nuevo)
 {
     if (actual == nullptr)
         return nuevo;
@@ -48,12 +48,12 @@ Diagnostico* ArbolDeDiagnosticos::insertarRec(Diagnostico* actual, Diagnostico* 
     return actual;
 }
 
-Diagnostico* ArbolDeDiagnosticos::buscar(string nombre)
+Diagnostico *ArbolDeDiagnosticos::buscar(string nombre)
 {
     return buscarRec(raiz, nombre);
 }
 
-Diagnostico* ArbolDeDiagnosticos::buscarRec(Diagnostico* actual, string nombre)
+Diagnostico *ArbolDeDiagnosticos::buscarRec(Diagnostico *actual, string nombre)
 {
     if (actual == nullptr)
         return nullptr;
@@ -61,7 +61,7 @@ Diagnostico* ArbolDeDiagnosticos::buscarRec(Diagnostico* actual, string nombre)
     if (actual->getNombre() == nombre)
         return actual;
 
-    Diagnostico* encontrado = buscarRec(actual->getIzquierdo(), nombre);
+    Diagnostico *encontrado = buscarRec(actual->getIzquierdo(), nombre);
 
     if (encontrado != nullptr)
         return encontrado;
@@ -71,7 +71,7 @@ Diagnostico* ArbolDeDiagnosticos::buscarRec(Diagnostico* actual, string nombre)
 
 void ArbolDeDiagnosticos::incrementarFrecuencia(string nombre)
 {
-    Diagnostico* diagnostico = buscar(nombre);
+    Diagnostico *diagnostico = buscar(nombre);
 
     if (diagnostico == nullptr)
     {
@@ -99,7 +99,7 @@ void ArbolDeDiagnosticos::listarDiagnosticos()
     inorderRec(raiz);
 }
 
-void ArbolDeDiagnosticos::inorderRec(Diagnostico* actual)
+void ArbolDeDiagnosticos::inorderRec(Diagnostico *actual)
 {
     if (actual == nullptr)
         return;
@@ -113,7 +113,7 @@ void ArbolDeDiagnosticos::inorderRec(Diagnostico* actual)
     inorderRec(actual->getDerecho());
 }
 
-Diagnostico* ArbolDeDiagnosticos::buscarMayorRec(Diagnostico* actual)
+Diagnostico *ArbolDeDiagnosticos::buscarMayorRec(Diagnostico *actual)
 {
     if (actual == nullptr)
         return nullptr;
@@ -124,14 +124,14 @@ Diagnostico* ArbolDeDiagnosticos::buscarMayorRec(Diagnostico* actual)
     return actual;
 }
 
-Diagnostico* ArbolDeDiagnosticos::diagnosticoMasFrecuente()
+Diagnostico *ArbolDeDiagnosticos::diagnosticoMasFrecuente()
 {
     return buscarMayorRec(raiz);
 }
 
 void ArbolDeDiagnosticos::eliminar(string nombre)
 {
-    Diagnostico* diagnostico = buscar(nombre);
+    Diagnostico *diagnostico = buscar(nombre);
 
     if (diagnostico == nullptr)
     {
@@ -142,15 +142,15 @@ void ArbolDeDiagnosticos::eliminar(string nombre)
     raiz = eliminarNodoRec(raiz, diagnostico);
 }
 
-Diagnostico* ArbolDeDiagnosticos::eliminarNodoRec(Diagnostico* actual, Diagnostico* objetivo)
+Diagnostico *ArbolDeDiagnosticos::eliminarNodoRec(Diagnostico *actual, Diagnostico *objetivo)
 {
     if (actual == nullptr)
         return nullptr;
 
     if (actual == objetivo)
     {
-        Diagnostico* izquierdo = actual->getIzquierdo();
-        Diagnostico* derecho = actual->getDerecho();
+        Diagnostico *izquierdo = actual->getIzquierdo();
+        Diagnostico *derecho = actual->getDerecho();
 
         actual->setIzquierdo(nullptr);
         actual->setDerecho(nullptr);
@@ -161,7 +161,7 @@ Diagnostico* ArbolDeDiagnosticos::eliminarNodoRec(Diagnostico* actual, Diagnosti
         if (derecho == nullptr)
             return izquierdo;
 
-        Diagnostico* sucesor = nullptr;
+        Diagnostico *sucesor = nullptr;
         derecho = extraerMinimo(derecho, sucesor);
 
         sucesor->setIzquierdo(izquierdo);
@@ -178,7 +178,7 @@ Diagnostico* ArbolDeDiagnosticos::eliminarNodoRec(Diagnostico* actual, Diagnosti
     return actual;
 }
 
-Diagnostico* ArbolDeDiagnosticos::extraerMinimo(Diagnostico* actual, Diagnostico*& minimoExtraido)
+Diagnostico *ArbolDeDiagnosticos::extraerMinimo(Diagnostico *actual, Diagnostico *&minimoExtraido)
 {
     if (actual->getIzquierdo() == nullptr)
     {
@@ -195,7 +195,7 @@ int ArbolDeDiagnosticos::altura()
     return alturaRec(raiz);
 }
 
-int ArbolDeDiagnosticos::alturaRec(Diagnostico* actual)
+int ArbolDeDiagnosticos::alturaRec(Diagnostico *actual)
 {
     if (actual == nullptr)
         return -1;
@@ -214,7 +214,7 @@ bool ArbolDeDiagnosticos::estaDesbalanceado()
     return estaDesbalanceadoRec(raiz);
 }
 
-bool ArbolDeDiagnosticos::estaDesbalanceadoRec(Diagnostico* actual)
+bool ArbolDeDiagnosticos::estaDesbalanceadoRec(Diagnostico *actual)
 {
     if (actual == nullptr)
         return false;
@@ -232,4 +232,78 @@ bool ArbolDeDiagnosticos::estaDesbalanceadoRec(Diagnostico* actual)
 
     return estaDesbalanceadoRec(actual->getIzquierdo()) ||
            estaDesbalanceadoRec(actual->getDerecho());
+}
+
+void ArbolDeDiagnosticos::mostrarArbol()
+{
+    if (raiz == nullptr)
+    {
+        cout << "No hay diagnosticos cargados." << endl;
+        return;
+    }
+
+    cout << "Raiz: "
+         << raiz->getNombre()
+         << " ("
+         << raiz->getFrecuencia()
+         << ")"
+         << endl;
+
+    if (raiz->getIzquierdo() != nullptr)
+    {
+        mostrarArbolRec(
+            raiz->getIzquierdo(),
+            "",
+            "Izq");
+    }
+
+    if (raiz->getDerecho() != nullptr)
+    {
+        mostrarArbolRec(
+            raiz->getDerecho(),
+            "",
+            "Der");
+    }
+}
+
+void ArbolDeDiagnosticos::mostrarArbolRec(
+    Diagnostico *actual,
+    string prefijo,
+    string lado)
+{
+    if (actual == nullptr)
+        return;
+
+    cout << prefijo;
+
+    cout << prefijo << "|-- ";
+
+    cout << lado
+         << ": "
+         << actual->getNombre()
+         << " ("
+         << actual->getFrecuencia()
+         << ")"
+         << endl;
+
+    string nuevoPrefijo = prefijo + "    ";
+
+    bool tieneIzq = actual->getIzquierdo() != nullptr;
+    bool tieneDer = actual->getDerecho() != nullptr;
+
+    if (tieneIzq)
+    {
+        mostrarArbolRec(
+            actual->getIzquierdo(),
+            nuevoPrefijo,
+            "Izq");
+    }
+
+    if (tieneDer)
+    {
+        mostrarArbolRec(
+            actual->getDerecho(),
+            nuevoPrefijo,
+            "Der");
+    }
 }

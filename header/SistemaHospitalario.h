@@ -96,6 +96,8 @@ public:
 
     int alturaArbolDiagnosticos();
 
+    void mostrarArbolDiagnosticos();
+
     int obtenerIndice(string codigo);
     vector<Hospital> mostrarLista();
 };
