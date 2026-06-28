@@ -2,12 +2,12 @@
 #define ARBOLDIAGNOSTICOS_H
 
 #include "Diagnostico.h"
+#include <string>
 
 using namespace std;
 
 class ArbolDeDiagnosticos
 {
-
 private:
 
     Diagnostico* raiz;
@@ -18,9 +18,15 @@ private:
 
     Diagnostico* buscarRec(Diagnostico* actual, string nombre);
 
-    void inorder(Diagnostico* actual);
+    void inorderRec(Diagnostico* actual);
+
+    Diagnostico* buscarMayorRec(Diagnostico* actual);
 
     int alturaRec(Diagnostico* actual);
+
+    Diagnostico* eliminarRec(Diagnostico* actual, string nombre);
+
+    Diagnostico* minimo(Diagnostico* actual);
 
 public:
 
@@ -32,10 +38,17 @@ public:
 
     Diagnostico* buscar(string nombre);
 
+    void incrementarFrecuencia(string nombre);
+
     void listarDiagnosticos();
+
+    Diagnostico* diagnosticoMasFrecuente();
+
+    void eliminar(string nombre);
 
     int altura();
 
+    bool estaDesbalanceado();
 };
 
 #endif
