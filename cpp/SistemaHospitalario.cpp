@@ -527,26 +527,27 @@ void SistemaHospitalario::registrarPaciente(Paciente nuevoPaciente)
 
 }
 
-void SistemaHospitalario::insertarDiagnostico(string nombre,int frecuencia)
+void SistemaHospitalario::insertarDiagnostico(string nombre, int frecuencia)
 {
-
     Diagnostico* encontrado = arbolDiagnosticos.buscar(nombre);
 
     if(encontrado != nullptr)
     {
-        cout<<"El diagnostico ya existe."<<endl;
+        cout << "El diagnostico ya existe." << endl;
         return;
     }
 
     Diagnostico* nuevo = new Diagnostico(nombre, frecuencia);
+    Diagnostico* nuevoAVL = new Diagnostico(nombre, frecuencia);
 
     arbolDiagnosticos.insertar(nuevo);
-
+    arbolAVLDiagnosticos.insertar(nuevoAVL);
 }
 
 void SistemaHospitalario::incrementarFrecuenciaDiagnostico(string nombre)
 {
     arbolDiagnosticos.incrementarFrecuencia(nombre);
+    arbolAVLDiagnosticos.incrementarFrecuencia(nombre);
 }
 
 void SistemaHospitalario::listarDiagnosticos()
@@ -562,6 +563,7 @@ Diagnostico* SistemaHospitalario::mostrarDiagnosticoFrecuente()
 void SistemaHospitalario::eliminarDiagnostico(string nombre)
 {
     arbolDiagnosticos.eliminar(nombre);
+    arbolAVLDiagnosticos.eliminar(nombre);
 }
 
 bool SistemaHospitalario::detectarDesbalanceo()
@@ -577,4 +579,19 @@ int SistemaHospitalario::alturaArbolDiagnosticos()
 void SistemaHospitalario::mostrarArbolDiagnosticos()
 {
     arbolDiagnosticos.mostrarArbol();
+}
+
+int SistemaHospitalario::alturaArbolAVLDiagnosticos()
+{
+    return arbolAVLDiagnosticos.altura();
+}
+
+void SistemaHospitalario::listarDiagnosticosAVL()
+{
+    arbolAVLDiagnosticos.listarDiagnosticos();
+}
+
+void SistemaHospitalario::mostrarArbolAVLDiagnosticos()
+{
+    arbolAVLDiagnosticos.mostrarArbol();
 }

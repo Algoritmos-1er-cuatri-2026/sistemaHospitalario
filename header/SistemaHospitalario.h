@@ -9,6 +9,7 @@
 #include "Turno.h"
 #include "Insumo.h"
 #include "ArbolDeDiagnosticos.h"
+#include "ArbolAVLDiagnosticos.h"
 #include <vector>
 #include <string>
 using namespace std;
@@ -42,6 +43,7 @@ private:
     vector<Derivacion> listaDerivaciones;
 
     ArbolDeDiagnosticos arbolDiagnosticos;
+    ArbolAVLDiagnosticos arbolAVLDiagnosticos;
 
     vector<NodoHash> tablaHash;
     int tamanoTablaHash;
@@ -97,6 +99,12 @@ public:
     int alturaArbolDiagnosticos();
 
     void mostrarArbolDiagnosticos();
+
+    void mostrarArbolAVLDiagnosticos();
+
+    int alturaArbolAVLDiagnosticos();
+
+    void listarDiagnosticosAVL();
 
     int obtenerIndice(string codigo);
     vector<Hospital> mostrarLista();

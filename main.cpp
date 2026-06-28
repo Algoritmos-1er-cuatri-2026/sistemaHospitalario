@@ -337,12 +337,15 @@ int main()
                 cout << "===== ARBOL DE DIAGNOSTICOS =====" << endl;
                 cout << "1 - Insertar diagnostico" << endl;
                 cout << "2 - Incrementar frecuencia" << endl;
-                cout << "3 - Listar diagnosticos en orden" << endl;
+                cout << "3 - Listar diagnosticos (BST)" << endl;
                 cout << "4 - Mostrar diagnostico mas frecuente" << endl;
                 cout << "5 - Eliminar diagnostico" << endl;
-                cout << "6 - Mostrar altura del arbol" << endl;
-                cout << "7 - Detectar desbalanceo" << endl;
-                cout << "8 - Mostrar arbol" << endl;
+                cout << "6 - Mostrar altura del arbol BST" << endl;
+                cout << "7 - Detectar desbalance del BST" << endl;
+                cout << "8 - Mostrar arbol BST" << endl;
+                cout << "9 - Mostrar arbol AVL" << endl;
+                cout << "10 - Comparar alturas BST y AVL" << endl;
+                cout << "11 - Listar diagnosticos AVL" << endl;
                 cout << "0 - Volver al menu principal" << endl;
                 cout << "Ingrese una opcion: ";
                 cin >> opcionDiagnostico;
@@ -452,6 +455,39 @@ int main()
                     cout << "--- ARBOL DE DIAGNOSTICOS ---" << endl;
 
                     sistema.mostrarArbolDiagnosticos();
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 9:
+                {
+                    cout << "--- ARBOL AVL ---" << endl;
+
+                    sistema.mostrarArbolAVLDiagnosticos();
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 10:
+                {
+                    cout << "Altura BST: "
+                         << sistema.alturaArbolDiagnosticos()
+                         << endl;
+
+                    cout << "Altura AVL: "
+                         << sistema.alturaArbolAVLDiagnosticos()
+                         << endl;
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 11:
+                {
+                    cout << "--- LISTADO INORDER AVL ---" << endl;
+                    sistema.listarDiagnosticosAVL();
 
                     volverAlMenu();
                     break;
