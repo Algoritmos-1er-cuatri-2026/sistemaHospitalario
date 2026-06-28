@@ -1,5 +1,4 @@
 #include "../header/ArbolDeDiagnosticos.h"
-
 #include <iostream>
 
 using namespace std;
@@ -27,24 +26,24 @@ bool ArbolDeDiagnosticos::esMenor(Diagnostico* primero, Diagnostico* segundo)
 
 void ArbolDeDiagnosticos::insertar(Diagnostico* diagnostico)
 {
+    if (diagnostico == nullptr)
+        return;
+
+    diagnostico->setIzquierdo(nullptr);
+    diagnostico->setDerecho(nullptr);
+
     raiz = insertarRec(raiz, diagnostico);
 }
 
 Diagnostico* ArbolDeDiagnosticos::insertarRec(Diagnostico* actual, Diagnostico* nuevo)
 {
     if (actual == nullptr)
-    {
         return nuevo;
-    }
 
     if (esMenor(nuevo, actual))
-    {
         actual->setIzquierdo(insertarRec(actual->getIzquierdo(), nuevo));
-    }
     else
-    {
         actual->setDerecho(insertarRec(actual->getDerecho(), nuevo));
-    }
 
     return actual;
 }
@@ -70,8 +69,33 @@ Diagnostico* ArbolDeDiagnosticos::buscarRec(Diagnostico* actual, string nombre)
     return buscarRec(actual->getDerecho(), nombre);
 }
 
+void ArbolDeDiagnosticos::incrementarFrecuencia(string nombre)
+{
+    Diagnostico* diagnostico = buscar(nombre);
+
+    if (diagnostico == nullptr)
+    {
+        cout << "No existe el diagnostico " << nombre << "." << endl;
+        return;
+    }
+
+    raiz = eliminarNodoRec(raiz, diagnostico);
+
+    diagnostico->incrementarFrecuencia();
+    diagnostico->setIzquierdo(nullptr);
+    diagnostico->setDerecho(nullptr);
+
+    insertar(diagnostico);
+}
+
 void ArbolDeDiagnosticos::listarDiagnosticos()
 {
+    if (raiz == nullptr)
+    {
+        cout << "No hay diagnosticos cargados." << endl;
+        return;
+    }
+
     inorderRec(raiz);
 }
 
@@ -82,9 +106,8 @@ void ArbolDeDiagnosticos::inorderRec(Diagnostico* actual)
 
     inorderRec(actual->getIzquierdo());
 
-    cout << actual->getNombre()
-         << " - Frecuencia: "
-         << actual->getFrecuencia()
+    cout << "Diagnostico: " << actual->getNombre()
+         << " | Frecuencia: " << actual->getFrecuencia()
          << endl;
 
     inorderRec(actual->getDerecho());
@@ -96,9 +119,7 @@ Diagnostico* ArbolDeDiagnosticos::buscarMayorRec(Diagnostico* actual)
         return nullptr;
 
     while (actual->getDerecho() != nullptr)
-    {
         actual = actual->getDerecho();
-    }
 
     return actual;
 }
@@ -106,6 +127,67 @@ Diagnostico* ArbolDeDiagnosticos::buscarMayorRec(Diagnostico* actual)
 Diagnostico* ArbolDeDiagnosticos::diagnosticoMasFrecuente()
 {
     return buscarMayorRec(raiz);
+}
+
+void ArbolDeDiagnosticos::eliminar(string nombre)
+{
+    Diagnostico* diagnostico = buscar(nombre);
+
+    if (diagnostico == nullptr)
+    {
+        cout << "No existe el diagnostico " << nombre << "." << endl;
+        return;
+    }
+
+    raiz = eliminarNodoRec(raiz, diagnostico);
+}
+
+Diagnostico* ArbolDeDiagnosticos::eliminarNodoRec(Diagnostico* actual, Diagnostico* objetivo)
+{
+    if (actual == nullptr)
+        return nullptr;
+
+    if (actual == objetivo)
+    {
+        Diagnostico* izquierdo = actual->getIzquierdo();
+        Diagnostico* derecho = actual->getDerecho();
+
+        actual->setIzquierdo(nullptr);
+        actual->setDerecho(nullptr);
+
+        if (izquierdo == nullptr)
+            return derecho;
+
+        if (derecho == nullptr)
+            return izquierdo;
+
+        Diagnostico* sucesor = nullptr;
+        derecho = extraerMinimo(derecho, sucesor);
+
+        sucesor->setIzquierdo(izquierdo);
+        sucesor->setDerecho(derecho);
+
+        return sucesor;
+    }
+
+    if (esMenor(objetivo, actual))
+        actual->setIzquierdo(eliminarNodoRec(actual->getIzquierdo(), objetivo));
+    else
+        actual->setDerecho(eliminarNodoRec(actual->getDerecho(), objetivo));
+
+    return actual;
+}
+
+Diagnostico* ArbolDeDiagnosticos::extraerMinimo(Diagnostico* actual, Diagnostico*& minimoExtraido)
+{
+    if (actual->getIzquierdo() == nullptr)
+    {
+        minimoExtraido = actual;
+        return actual->getDerecho();
+    }
+
+    actual->setIzquierdo(extraerMinimo(actual->getIzquierdo(), minimoExtraido));
+    return actual;
 }
 
 int ArbolDeDiagnosticos::altura()
@@ -118,96 +200,36 @@ int ArbolDeDiagnosticos::alturaRec(Diagnostico* actual)
     if (actual == nullptr)
         return -1;
 
-    int izquierda = alturaRec(actual->getIzquierdo());
-    int derecha = alturaRec(actual->getDerecho());
+    int alturaIzquierda = alturaRec(actual->getIzquierdo());
+    int alturaDerecha = alturaRec(actual->getDerecho());
 
-    if (izquierda > derecha)
-        return izquierda + 1;
+    if (alturaIzquierda > alturaDerecha)
+        return alturaIzquierda + 1;
 
-    return derecha + 1;
+    return alturaDerecha + 1;
 }
 
 bool ArbolDeDiagnosticos::estaDesbalanceado()
 {
-    if (raiz == nullptr)
+    return estaDesbalanceadoRec(raiz);
+}
+
+bool ArbolDeDiagnosticos::estaDesbalanceadoRec(Diagnostico* actual)
+{
+    if (actual == nullptr)
         return false;
 
-    int izquierda = alturaRec(raiz->getIzquierdo());
-    int derecha = alturaRec(raiz->getDerecho());
+    int izquierda = alturaRec(actual->getIzquierdo());
+    int derecha = alturaRec(actual->getDerecho());
 
     int diferencia = izquierda - derecha;
 
     if (diferencia < 0)
-        diferencia *= -1;
+        diferencia = diferencia * -1;
 
-    return diferencia > 2;
-}
+    if (diferencia > 2)
+        return true;
 
-Diagnostico* ArbolDeDiagnosticos::minimo(Diagnostico* actual)
-{
-    while (actual->getIzquierdo() != nullptr)
-    {
-        actual = actual->getIzquierdo();
-    }
-
-    return actual;
-}
-
-void ArbolDeDiagnosticos::eliminar(string nombre)
-{
-    raiz = eliminarRec(raiz, nombre);
-}
-
-Diagnostico* ArbolDeDiagnosticos::eliminarRec(Diagnostico* actual, string nombre)
-{
-    if (actual == nullptr)
-    {
-        return nullptr;
-    }
-
-    if (actual->getNombre() == nombre)
-    {
-        if (actual->getIzquierdo() == nullptr)
-        {
-            return actual->getDerecho();
-        }
-
-        if (actual->getDerecho() == nullptr)
-        {
-            return actual->getIzquierdo();
-        }
-
-        Diagnostico* sucesor = minimo(actual->getDerecho());
-
-        actual->setNombre(sucesor->getNombre());
-        actual->setFrecuencia(sucesor->getFrecuencia());
-
-        actual->setDerecho(eliminarRec(actual->getDerecho(), sucesor->getNombre()));
-
-        return actual;
-    }
-
-    actual->setIzquierdo(eliminarRec(actual->getIzquierdo(), nombre));
-    actual->setDerecho(eliminarRec(actual->getDerecho(), nombre));
-
-    return actual;
-}
-
-void ArbolDeDiagnosticos::incrementarFrecuencia(string nombre)
-{
-    Diagnostico* encontrado = buscar(nombre);
-
-    if (encontrado == nullptr)
-    {
-        return;
-    }
-
-    string nombreDiag = encontrado->getNombre();
-    int frecuenciaNueva = encontrado->getFrecuencia() + 1;
-
-    eliminar(nombreDiag);
-
-    Diagnostico* nuevo = new Diagnostico(nombreDiag, frecuenciaNueva);
-
-    insertar(nuevo);
+    return estaDesbalanceadoRec(actual->getIzquierdo()) ||
+           estaDesbalanceadoRec(actual->getDerecho());
 }

@@ -9,7 +9,6 @@ using namespace std;
 class ArbolDeDiagnosticos
 {
 private:
-
     Diagnostico* raiz;
 
     bool esMenor(Diagnostico* primero, Diagnostico* segundo);
@@ -24,12 +23,13 @@ private:
 
     int alturaRec(Diagnostico* actual);
 
-    Diagnostico* eliminarRec(Diagnostico* actual, string nombre);
+    bool estaDesbalanceadoRec(Diagnostico* actual);
 
-    Diagnostico* minimo(Diagnostico* actual);
+    Diagnostico* eliminarNodoRec(Diagnostico* actual, Diagnostico* objetivo);
+
+    Diagnostico* extraerMinimo(Diagnostico* actual, Diagnostico*& minimoExtraido);
 
 public:
-
     ArbolDeDiagnosticos();
 
     bool estaVacio();
