@@ -507,23 +507,41 @@ void SistemaHospitalario::buscarTurnosPorDNI(int dni)
 
 void SistemaHospitalario::registrarPaciente(Paciente nuevoPaciente)
 {
-    this->listaPacientes.push_back(nuevoPaciente);
+    listaPacientes.push_back(nuevoPaciente);
 
-    insertarDiagnostico(nuevoPaciente.getDiagnostico());
-}
+    Diagnostico* encontrado =
+        arbolDiagnosticos.buscar(
+            nuevoPaciente.getDiagnostico());
 
-void SistemaHospitalario::insertarDiagnostico(string nombre)
-{
-    Diagnostico *encontrado = arbolDiagnosticos.buscar(nombre);
-
-    if (encontrado == nullptr)
+    if(encontrado == nullptr)
     {
-        arbolDiagnosticos.insertar(new Diagnostico(nombre, 1));
+        insertarDiagnostico(
+            nuevoPaciente.getDiagnostico(),
+            1);
     }
     else
     {
-        arbolDiagnosticos.incrementarFrecuencia(nombre);
+        incrementarFrecuenciaDiagnostico(
+            nuevoPaciente.getDiagnostico());
     }
+
+}
+
+void SistemaHospitalario::insertarDiagnostico(string nombre,int frecuencia)
+{
+
+    Diagnostico* encontrado = arbolDiagnosticos.buscar(nombre);
+
+    if(encontrado != nullptr)
+    {
+        cout<<"El diagnostico ya existe."<<endl;
+        return;
+    }
+
+    Diagnostico* nuevo = new Diagnostico(nombre, frecuencia);
+
+    arbolDiagnosticos.insertar(nuevo);
+
 }
 
 void SistemaHospitalario::incrementarFrecuenciaDiagnostico(string nombre)
@@ -536,7 +554,7 @@ void SistemaHospitalario::listarDiagnosticos()
     arbolDiagnosticos.listarDiagnosticos();
 }
 
-Diagnostico *SistemaHospitalario::mostrarDiagnosticoFrecuente()
+Diagnostico* SistemaHospitalario::mostrarDiagnosticoFrecuente()
 {
     return arbolDiagnosticos.diagnosticoMasFrecuente();
 }

@@ -82,20 +82,19 @@ public:
     void buscarTurnosPorDNI(int dni);                                                      // Punto B.3
     void gestionarListaDeEspera(int codigo);                                               // Punto B.4
     void listarTurnosCronologicamente(int idMedico);                                       // Punto B.5
+    void insertarDiagnostico(string nombre, int frecuencia);
 
-    void insertarDiagnostico(string nombre);// Punto C.1
+    void incrementarFrecuenciaDiagnostico(string nombre);
 
-    void incrementarFrecuenciaDiagnostico(string nombre);// Punto C.2
+    void listarDiagnosticos();
 
-    void listarDiagnosticos();// Punto C.3
+    Diagnostico *mostrarDiagnosticoFrecuente();
 
-    Diagnostico *mostrarDiagnosticoFrecuente();// Punto C.4
+    void eliminarDiagnostico(string nombre);
 
-    void eliminarDiagnostico(string nombre);// Punto C.5
+    bool detectarDesbalanceo();
 
-    bool detectarDesbalanceo();// Punto C.6
-
-    int alturaArbolDiagnosticos();                         
+    int alturaArbolDiagnosticos();
 
     int obtenerIndice(string codigo);
     vector<Hospital> mostrarLista();
