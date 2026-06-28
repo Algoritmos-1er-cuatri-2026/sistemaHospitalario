@@ -123,6 +123,7 @@ int main()
         cout << "===== SISTEMA HOSPITALARIO =====" << endl;
         cout << "1 - Gestion de Hospitales" << endl;
         cout << "2 - Gestion de Pacientes y Turnos" << endl;
+        cout << "3 - Arbol de Diagnosticos" << endl;
         cout << "0 - Salir del sistema" << endl;
         cout << "Ingrese una opcion: ";
         cin >> opcionSistema;
@@ -200,12 +201,12 @@ int main()
                     string codigo;
                     cout << "Ingrese el codigo: ";
                     cin >> codigo;
-                    cout<<"Se listaran los pacientes: "<<endl;
+                    cout << "Se listaran los pacientes: " << endl;
                     sistema.mostrarPacientes();
                     sistema.eliminarHospital(codigo);
 
                     cout << "Hospital eliminado correctamente" << endl;
-                    cout<<"Listando pacientes nuevamente, los asociados al hospital eliminado se derivaron al hospital mas cercano"<<endl;
+                    cout << "Listando pacientes nuevamente, los asociados al hospital eliminado se derivaron al hospital mas cercano" << endl;
                     sistema.mostrarPacientes();
                     volverAlMenu();
                     break;
@@ -306,7 +307,7 @@ int main()
 
                     cout << endl;
                     sistema.buscarTurnosPorDNI(dniBusqueda);
-                    //Ver si usar algun algoritmo de busqueda en lugar del secuencial usado
+                    // Ver si usar algun algoritmo de busqueda en lugar del secuencial usado
 
                     volverAlMenu();
                     break;
@@ -324,6 +325,138 @@ int main()
                     break;
                 }
             } while (opcionPaciente != 0);
+            break;
+        }
+
+        case 3:
+        {
+            int opcionDiagnostico;
+
+            do
+            {
+                cout << "===== ARBOL DE DIAGNOSTICOS =====" << endl;
+                cout << "1 - Insertar diagnostico" << endl;
+                cout << "2 - Incrementar frecuencia" << endl;
+                cout << "3 - Listar diagnosticos en orden" << endl;
+                cout << "4 - Mostrar diagnostico mas frecuente" << endl;
+                cout << "5 - Eliminar diagnostico" << endl;
+                cout << "6 - Mostrar altura del arbol" << endl;
+                cout << "7 - Detectar desbalanceo" << endl;
+                cout << "0 - Volver al menu principal" << endl;
+                cout << "Ingrese una opcion: ";
+                cin >> opcionDiagnostico;
+
+                switch (opcionDiagnostico)
+                {
+                case 1:
+                {
+                    string nombre;
+                    int frecuencia;
+
+                    cout << "Ingrese el nombre del diagnostico: ";
+                    cin >> nombre;
+
+                    cout << "Ingrese la frecuencia inicial: ";
+                    cin >> frecuencia;
+
+                    sistema.insertarDiagnostico(nombre, frecuencia);
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 2:
+                {
+                    string nombre;
+
+                    cout << "Ingrese el nombre del diagnostico: ";
+                    cin >> nombre;
+
+                    sistema.incrementarFrecuenciaDiagnostico(nombre);
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 3:
+                {
+                    cout << "--- LISTADO INORDER DE DIAGNOSTICOS ---" << endl;
+                    sistema.listarDiagnosticos();
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 4:
+                {
+                    Diagnostico *frecuente = sistema.mostrarDiagnosticoFrecuente();
+
+                    if (frecuente == nullptr)
+                    {
+                        cout << "No hay diagnosticos cargados." << endl;
+                    }
+                    else
+                    {
+                        cout << "Diagnostico mas frecuente: "
+                             << frecuente->getNombre()
+                             << " | Frecuencia: "
+                             << frecuente->getFrecuencia()
+                             << endl;
+                    }
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 5:
+                {
+                    string nombre;
+
+                    cout << "Ingrese el nombre del diagnostico a eliminar: ";
+                    cin >> nombre;
+
+                    sistema.eliminarDiagnostico(nombre);
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 6:
+                {
+                    cout << "Altura del arbol: "
+                         << sistema.alturaArbolDiagnosticos()
+                         << endl;
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 7:
+                {
+                    if (sistema.detectarDesbalanceo())
+                    {
+                        cout << "El arbol esta desbalanceado." << endl;
+                    }
+                    else
+                    {
+                        cout << "El arbol no esta desbalanceado." << endl;
+                    }
+
+                    volverAlMenu();
+                    break;
+                }
+
+                case 0:
+                    cout << "Volviendo al menu principal." << endl;
+                    break;
+
+                default:
+                    cout << "Opcion invalida." << endl;
+                    break;
+                }
+
+            } while (opcionDiagnostico != 0);
+
             break;
         }
 
