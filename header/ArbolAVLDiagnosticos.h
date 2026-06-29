@@ -31,6 +31,8 @@ private:
 
     Diagnostico *balancear(Diagnostico *actual);
 
+    void destruirRec(Diagnostico* actual);
+
     void inorderRec(Diagnostico *actual);
 
     void mostrarArbolRec(Diagnostico *actual,
@@ -39,6 +41,12 @@ private:
 
 public:
     ArbolAVLDiagnosticos();
+
+    ~ArbolAVLDiagnosticos();
+
+    ArbolAVLDiagnosticos(const ArbolAVLDiagnosticos&) = delete;
+
+    ArbolAVLDiagnosticos& operator=(const ArbolAVLDiagnosticos&) = delete;
 
     Diagnostico *buscar(string nombre);
 

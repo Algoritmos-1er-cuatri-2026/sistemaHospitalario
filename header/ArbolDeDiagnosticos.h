@@ -17,6 +17,8 @@ private:
 
     Diagnostico* buscarRec(Diagnostico* actual, string nombre);
 
+    void destruirRec(Diagnostico* actual);
+
     void inorderRec(Diagnostico* actual);
 
     Diagnostico* buscarMayorRec(Diagnostico* actual);
@@ -35,6 +37,12 @@ private:
 
 public:
     ArbolDeDiagnosticos();
+
+    ~ArbolDeDiagnosticos();
+
+    ArbolDeDiagnosticos(const ArbolDeDiagnosticos&) = delete;
+
+    ArbolDeDiagnosticos& operator=(const ArbolDeDiagnosticos&) = delete;
 
     bool estaVacio();
 

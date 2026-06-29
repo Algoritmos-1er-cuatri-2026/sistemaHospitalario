@@ -8,12 +8,29 @@ ArbolAVLDiagnosticos::ArbolAVLDiagnosticos()
     raiz = nullptr;
 }
 
+ArbolAVLDiagnosticos::~ArbolAVLDiagnosticos()
+{
+    destruirRec(raiz);
+    raiz = nullptr;
+}
+
+void ArbolAVLDiagnosticos::destruirRec(Diagnostico *actual)
+{
+    if (actual == nullptr)
+        return;
+
+    destruirRec(actual->getIzquierdo());
+    destruirRec(actual->getDerecho());
+
+    delete actual;
+}
+
 bool ArbolAVLDiagnosticos::estaVacio()
 {
     return raiz == nullptr;
 }
 
-bool ArbolAVLDiagnosticos::esMenor(Diagnostico* primero, Diagnostico* segundo)
+bool ArbolAVLDiagnosticos::esMenor(Diagnostico *primero, Diagnostico *segundo)
 {
     if (primero->getFrecuencia() < segundo->getFrecuencia())
         return true;
@@ -29,7 +46,7 @@ int ArbolAVLDiagnosticos::altura()
     return alturaRec(raiz);
 }
 
-int ArbolAVLDiagnosticos::alturaRec(Diagnostico* actual)
+int ArbolAVLDiagnosticos::alturaRec(Diagnostico *actual)
 {
     if (actual == nullptr)
         return -1;
@@ -43,7 +60,7 @@ int ArbolAVLDiagnosticos::alturaRec(Diagnostico* actual)
     return alturaDerecha + 1;
 }
 
-int ArbolAVLDiagnosticos::factorBalance(Diagnostico* actual)
+int ArbolAVLDiagnosticos::factorBalance(Diagnostico *actual)
 {
     if (actual == nullptr)
         return 0;
@@ -51,10 +68,10 @@ int ArbolAVLDiagnosticos::factorBalance(Diagnostico* actual)
     return alturaRec(actual->getIzquierdo()) - alturaRec(actual->getDerecho());
 }
 
-Diagnostico* ArbolAVLDiagnosticos::rotarDerecha(Diagnostico* y)
+Diagnostico *ArbolAVLDiagnosticos::rotarDerecha(Diagnostico *y)
 {
-    Diagnostico* x = y->getIzquierdo();
-    Diagnostico* t2 = x->getDerecho();
+    Diagnostico *x = y->getIzquierdo();
+    Diagnostico *t2 = x->getDerecho();
 
     x->setDerecho(y);
     y->setIzquierdo(t2);
@@ -62,10 +79,10 @@ Diagnostico* ArbolAVLDiagnosticos::rotarDerecha(Diagnostico* y)
     return x;
 }
 
-Diagnostico* ArbolAVLDiagnosticos::rotarIzquierda(Diagnostico* x)
+Diagnostico *ArbolAVLDiagnosticos::rotarIzquierda(Diagnostico *x)
 {
-    Diagnostico* y = x->getDerecho();
-    Diagnostico* t2 = y->getIzquierdo();
+    Diagnostico *y = x->getDerecho();
+    Diagnostico *t2 = y->getIzquierdo();
 
     y->setIzquierdo(x);
     x->setDerecho(t2);
@@ -73,7 +90,7 @@ Diagnostico* ArbolAVLDiagnosticos::rotarIzquierda(Diagnostico* x)
     return y;
 }
 
-void ArbolAVLDiagnosticos::insertar(Diagnostico* diagnostico)
+void ArbolAVLDiagnosticos::insertar(Diagnostico *diagnostico)
 {
     if (diagnostico == nullptr)
         return;
@@ -84,7 +101,7 @@ void ArbolAVLDiagnosticos::insertar(Diagnostico* diagnostico)
     raiz = insertarRec(raiz, diagnostico);
 }
 
-Diagnostico* ArbolAVLDiagnosticos::insertarRec(Diagnostico* actual, Diagnostico* nuevo)
+Diagnostico *ArbolAVLDiagnosticos::insertarRec(Diagnostico *actual, Diagnostico *nuevo)
 {
     if (actual == nullptr)
         return nuevo;
@@ -128,7 +145,7 @@ void ArbolAVLDiagnosticos::listarDiagnosticos()
     inorderRec(raiz);
 }
 
-void ArbolAVLDiagnosticos::inorderRec(Diagnostico* actual)
+void ArbolAVLDiagnosticos::inorderRec(Diagnostico *actual)
 {
     if (actual == nullptr)
         return;
@@ -169,7 +186,7 @@ void ArbolAVLDiagnosticos::mostrarArbol()
 }
 
 void ArbolAVLDiagnosticos::mostrarArbolRec(
-    Diagnostico* actual,
+    Diagnostico *actual,
     string prefijo,
     string lado)
 {
@@ -199,12 +216,12 @@ void ArbolAVLDiagnosticos::mostrarArbolRec(
     }
 }
 
-Diagnostico* ArbolAVLDiagnosticos::buscar(string nombre)
+Diagnostico *ArbolAVLDiagnosticos::buscar(string nombre)
 {
     return buscarRec(raiz, nombre);
 }
 
-Diagnostico* ArbolAVLDiagnosticos::buscarRec(Diagnostico* actual, string nombre)
+Diagnostico *ArbolAVLDiagnosticos::buscarRec(Diagnostico *actual, string nombre)
 {
     if (actual == nullptr)
         return nullptr;
@@ -212,7 +229,7 @@ Diagnostico* ArbolAVLDiagnosticos::buscarRec(Diagnostico* actual, string nombre)
     if (actual->getNombre() == nombre)
         return actual;
 
-    Diagnostico* encontrado = buscarRec(actual->getIzquierdo(), nombre);
+    Diagnostico *encontrado = buscarRec(actual->getIzquierdo(), nombre);
 
     if (encontrado != nullptr)
         return encontrado;
@@ -220,7 +237,7 @@ Diagnostico* ArbolAVLDiagnosticos::buscarRec(Diagnostico* actual, string nombre)
     return buscarRec(actual->getDerecho(), nombre);
 }
 
-Diagnostico* ArbolAVLDiagnosticos::minimo(Diagnostico* actual)
+Diagnostico *ArbolAVLDiagnosticos::minimo(Diagnostico *actual)
 {
     while (actual != nullptr && actual->getIzquierdo() != nullptr)
     {
@@ -230,7 +247,7 @@ Diagnostico* ArbolAVLDiagnosticos::minimo(Diagnostico* actual)
     return actual;
 }
 
-Diagnostico* ArbolAVLDiagnosticos::balancear(Diagnostico* actual)
+Diagnostico *ArbolAVLDiagnosticos::balancear(Diagnostico *actual)
 {
     if (actual == nullptr)
         return nullptr;
@@ -265,7 +282,7 @@ void ArbolAVLDiagnosticos::eliminar(string nombre)
     raiz = eliminarRec(raiz, nombre);
 }
 
-Diagnostico* ArbolAVLDiagnosticos::eliminarRec(Diagnostico* actual, string nombre)
+Diagnostico *ArbolAVLDiagnosticos::eliminarRec(Diagnostico *actual, string nombre)
 {
     if (actual == nullptr)
         return nullptr;
@@ -274,20 +291,25 @@ Diagnostico* ArbolAVLDiagnosticos::eliminarRec(Diagnostico* actual, string nombr
     {
         if (actual->getIzquierdo() == nullptr && actual->getDerecho() == nullptr)
         {
+            delete actual;
             return nullptr;
         }
 
         if (actual->getIzquierdo() == nullptr)
         {
-            return actual->getDerecho();
+            Diagnostico *derecho = actual->getDerecho();
+            delete actual;
+            return derecho;
         }
 
         if (actual->getDerecho() == nullptr)
         {
-            return actual->getIzquierdo();
+            Diagnostico *izquierdo = actual->getIzquierdo();
+            delete actual;
+            return izquierdo;
         }
 
-        Diagnostico* sucesor = minimo(actual->getDerecho());
+        Diagnostico *sucesor = minimo(actual->getDerecho());
 
         actual->setNombre(sucesor->getNombre());
         actual->setFrecuencia(sucesor->getFrecuencia());
@@ -305,7 +327,7 @@ Diagnostico* ArbolAVLDiagnosticos::eliminarRec(Diagnostico* actual, string nombr
 
 void ArbolAVLDiagnosticos::incrementarFrecuencia(string nombre)
 {
-    Diagnostico* encontrado = buscar(nombre);
+    Diagnostico *encontrado = buscar(nombre);
 
     if (encontrado == nullptr)
     {
@@ -318,7 +340,7 @@ void ArbolAVLDiagnosticos::incrementarFrecuencia(string nombre)
 
     eliminar(nombreDiagnostico);
 
-    Diagnostico* actualizado = new Diagnostico(nombreDiagnostico, nuevaFrecuencia);
+    Diagnostico *actualizado = new Diagnostico(nombreDiagnostico, nuevaFrecuencia);
 
     insertar(actualizado);
 }

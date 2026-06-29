@@ -8,6 +8,23 @@ ArbolDeDiagnosticos::ArbolDeDiagnosticos()
     raiz = nullptr;
 }
 
+ArbolDeDiagnosticos::~ArbolDeDiagnosticos()
+{
+    destruirRec(raiz);
+    raiz = nullptr;
+}
+
+void ArbolDeDiagnosticos::destruirRec(Diagnostico* actual)
+{
+    if (actual == nullptr)
+        return;
+
+    destruirRec(actual->getIzquierdo());
+    destruirRec(actual->getDerecho());
+
+    delete actual;
+}
+
 bool ArbolDeDiagnosticos::estaVacio()
 {
     return raiz == nullptr;
@@ -140,6 +157,7 @@ void ArbolDeDiagnosticos::eliminar(string nombre)
     }
 
     raiz = eliminarNodoRec(raiz, diagnostico);
+    delete diagnostico;
 }
 
 Diagnostico *ArbolDeDiagnosticos::eliminarNodoRec(Diagnostico *actual, Diagnostico *objetivo)
