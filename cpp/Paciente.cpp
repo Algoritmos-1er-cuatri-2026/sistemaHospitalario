@@ -50,3 +50,8 @@ void Paciente::setCodHospital(string codigo)
 {
     this->codigoHospital = codigo;
 }
+
+void Paciente::setPrioridad(int nuevaPrio)
+{
+    this->prioridad = nuevaPrio;
+}

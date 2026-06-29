@@ -103,6 +103,7 @@ int main()
         {
             Paciente nuevoPaciente(codigoHospital, idPaciente, dni, fechaIngreso, diagnostico, prioridad, pesoKg);
             sistema.registrarPaciente(nuevoPaciente);
+            sistema.insertarPaciente(nuevoPaciente);//Se agrega a la Cola de Prioridad
         }
 
         archPacientes.close();
@@ -294,6 +295,11 @@ int main()
 
                 case 2:
                 {
+                    int cantidad;
+                    cout << "--- DETECTAR HOSPITALES CON SOBRECARGA ---" << endl;
+                    cout << "Ingrese la cantidad maxima de ingresos semanales permitidos: " << endl;
+                    cin >> cantidad;
+                    sistema.detectarSobrecargaDePacientes(cantidad);
 
                     volverAlMenu();
                     break;
@@ -313,15 +319,109 @@ int main()
                     break;
                 }
                 case 4:
+                {
+                    int opcionPrioridad;
+                    do
+                    {
+                        cout << "--- COLA DE PRIORIDAD ---" << endl;
+                        cout << "1. Insertar Paciente a Cola de Prioridad" << endl;
+                        cout << "2. Extraer Paciente mas Prioritario de Cola de Prioridad" << endl;
+                        cout << "3. Actualizar Prioridad de Paciente segun ID" << endl;
+                        cout << "4. Mostrar Cola de Prioridad" << endl;
+                        cout << "0 - Volver al menu anterior" << endl;
+                        cout << "Opcion: ";
+                        cin >> opcionPrioridad;
+                        switch (opcionPrioridad)
+                        {
+                        case 1:
+                        { // INSERTAR
+                            string codigoHospital, diagnostico;
+                            int id, dni, fecha, prio, pesoKg;
+                            string motivo;
+                            cout << "Codigo Hospital: " << endl;
+                            cin >> codigoHospital;
+                            cout << "ID: " << endl;
+                            cin >> id;
+                            cout << "DNI: " << endl;
+                            cin >> dni;
+                            cout << "Fecha (AAAAMMDD): " << endl;
+                            cin >> fecha;
+                            cout << "Diagnostico: " << endl;
+                            cin >> diagnostico;
+                            cout << "Prioridad (1-5): " << endl;
+                            cin >> prio;
+                            cout << "Peso en KG: " << endl;
+                            cin >> pesoKg;
 
-                    volverAlMenu();
+                            Paciente nuevoPaciente(codigoHospital, id, dni, fecha, diagnostico, prio, pesoKg);
+                            sistema.insertarPaciente(nuevoPaciente);
+                            cout << "Paciente registrado." << endl;
+
+                            volverAlMenu();
+                            break;
+                        }
+                        case 2:
+                        { // EXTRAER
+                            if (sistema.listaPrioridadVacia())
+                            {
+                                cout << "No hay pacientes en espera." << endl;
+                            }
+                            else
+                            {
+                                Paciente p = sistema.extraerMasPrioritario();
+                                cout << "ATENDIDO -> ID: " << p.getIdPaciente()
+                                     << " | Prioridad: " << p.getPrioridad() << endl;
+                            }
+
+                            volverAlMenu();
+                            break;
+                        }
+                        case 3:
+                        { // ACTUALIZAR
+                            int id, nuevaPrio;
+                            cout << "ID del paciente: ";
+                            cin >> id;
+                            cout << "Nueva prioridad (1-5): ";
+                            cin >> nuevaPrio;
+
+                            sistema.actualizarPrioridad(id, nuevaPrio);
+                            cout << "-> Prioridad actualizada." << endl;
+
+                            volverAlMenu();
+                            break;
+                        }
+                        case 4:
+                        {
+                            sistema.mostrarEnOrden();
+
+                            volverAlMenu();
+                            break;
+                        }
+                        }
+
+                    } while (opcionPrioridad != 0);
+
                     break;
+                }
                 case 5:
+                {
+                    int idMedicoBusqueda;
+                    cout << "--- LISTAR TURNOS DE UN MEDICO (CRONOLOGICO) ---" << endl;
+                    cout << "Ingrese el ID del medico a consultar: ";
+                    cin >> idMedicoBusqueda;
+
+                    cout << endl;
+                    sistema.listarTurnosCronologicamente(idMedicoBusqueda);
 
                     volverAlMenu();
                     break;
+                }
                 case 0:
-                    cout << "Volviendo al menu del sistema hospitalario";
+                    cout << "Volviendo al menu principal." << endl;
+                    break;
+
+                default:
+                    cout << "Opcion invalida." << endl;
                     break;
                 }
             } while (opcionPaciente != 0);

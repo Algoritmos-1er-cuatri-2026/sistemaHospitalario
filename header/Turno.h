@@ -18,7 +18,9 @@ public:
     
     int getIdPaciente();
     int getIdMedico();
-    int getFecha();
+    int getFecha() const;
+    string getEspecialidad();
+    int getDuracionMin();
 };
 
 #endif

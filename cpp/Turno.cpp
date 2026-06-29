@@ -11,4 +11,6 @@ Turno::Turno(int id, int paciente, int medico, int fecha, string esp, int duraci
 
 int Turno::getIdPaciente() { return this->idPaciente; }
 int Turno::getIdMedico() { return this->idMedico; }
-int Turno::getFecha() { return this->fechaTurno; }
+int Turno::getFecha() const{ return this->fechaTurno; }
+string Turno::getEspecialidad() { return this->especialidad; }
+int Turno::getDuracionMin() { return this->duracionMin; }

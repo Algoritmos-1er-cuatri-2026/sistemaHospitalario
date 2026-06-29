@@ -1,4 +1,6 @@
 #include "../header/SistemaHospitalario.h"
+#include "../header/ColaPrioridad.h"
+#include "../header/Sort.h"
 #include <iostream>
 #include <queue>
 
@@ -418,41 +420,23 @@ void SistemaHospitalario::buscarPorEspecialidad(string especialidad)
     }
 }
 
-// B.1
-
-void SistemaHospitalario::agregarTurnoAHospital(string codigoHospital, Turno nuevoTurno)
-{
+/// *********** PARTE B ***************
+//B.1
+int SistemaHospitalario::calcularPacientesAtendidos(string codigoHospital, int fechaDesde, int fechaHasta) {
     int indice = obtenerIndice(codigoHospital);
 
-    if (indice != -1)
-    {
-        this->listaHospitales[indice].registrarTurno(nuevoTurno);
-    }
-    else
-    {
-        cout << "Error: El hospital con codigo " << codigoHospital << " no existe. No se pudo cargar el turno." << endl;
-    }
-}
-
-int SistemaHospitalario::calcularPacientesAtendidos(string codigoHospital, int fechaDesde, int fechaHasta)
-{
-    int indice = obtenerIndice(codigoHospital);
-
-    if (indice == -1)
-    {
+    if (indice == -1) {
         cout << "Error: El hospital con codigo " << codigoHospital << " no existe." << endl;
         return 0;
     }
-
+    
     vector<Turno> turnosHospital = this->listaHospitales[indice].getTurnos();
     int totalPacientes = 0;
 
-    for (size_t i = 0; i < turnosHospital.size(); i++)
-    {
+    for (size_t i = 0; i < turnosHospital.size(); i++) {
         Turno t = turnosHospital[i];
 
-        if (t.getFecha() >= fechaDesde && t.getFecha() <= fechaHasta)
-        {
+        if (t.getFecha() >= fechaDesde && t.getFecha() <= fechaHasta) {
             totalPacientes++;
         }
     }
@@ -460,22 +444,64 @@ int SistemaHospitalario::calcularPacientesAtendidos(string codigoHospital, int f
     return totalPacientes;
 }
 
-// B.3
-void SistemaHospitalario::buscarTurnosPorDNI(int dni)
-{
-    int idBuscado = -1;
+//B.2
+void SistemaHospitalario::detectarSobrecargaDePacientes(int x) {
+    cout << "--- REPORTES DE HOSPITALES CON SOBRECARGA ---" << endl;
+    bool huboSobrecarga = false;
 
-    for (size_t i = 0; i < this->listaPacientes.size(); i++)
-    {
-        if (this->listaPacientes[i].getDni() == dni)
-        {
-            idBuscado = this->listaPacientes[i].getIdPaciente();
-            break;
+    for (size_t i = 0; i < this->listaHospitales.size(); i++) {
+        Hospital h = this->listaHospitales[i];
+        int cantidadTurnos = h.getTurnos().size(); 
+        int capacidadCamas = h.getCapacidad(); 
+
+        if (capacidadCamas == 0) {
+            cout << "Camas no puede ser 0" << endl;
+            return;
+        }
+
+        float porcentajeOcupacion = ((float)cantidadTurnos / capacidadCamas) * 100.0;
+        bool superaPorFecha = false;
+        vector<Turno> turnosHospital = h.getTurnos();
+
+        for (size_t j = 0; j < turnosHospital.size(); j++) {
+            int ingresosEnSemana = 0;
+            int fechaInicio = turnosHospital[j].getFecha();
+
+            for (size_t k = j; k < turnosHospital.size(); k++) {
+                if (turnosHospital[k].getFecha() - fechaInicio <= 6) {
+                    ingresosEnSemana++;
+                }
+            }
+
+            if (ingresosEnSemana > x) {
+                superaPorFecha = true;
+                break;
+            }
+        }
+
+        if (porcentajeOcupacion >= 90 || superaPorFecha) {
+            huboSobrecarga = true;
+            cout << "El hospital " << h.getNombre() << " en " << h.getCiudad() << " esta SOBRECARGADO." << endl;
         }
     }
 
-    if (idBuscado == -1)
-    {
+    if (!huboSobrecarga) {
+        cout << "No se detectaron hospitales con SOBRECARGA. " << endl;
+    }
+}
+
+//B.3
+void SistemaHospitalario::buscarTurnosPorDNI(int dni) {
+    int idBuscado = -1;
+
+    for (size_t i = 0; i < this->listaPacientes.size(); i++) {
+        if (this->listaPacientes[i].getDni() == dni) {
+            idBuscado = this->listaPacientes[i].getIdPaciente();
+            break; 
+        }
+    }
+
+    if (idBuscado == -1) {
         cout << "No se encontro ningun paciente con el DNI: " << dni << endl;
         return;
     }
@@ -483,28 +509,99 @@ void SistemaHospitalario::buscarTurnosPorDNI(int dni)
     cout << "--- TURNOS ASIGNADOS PARA EL PACIENTE (DNI: " << dni << ") ---" << endl;
     bool tieneTurnos = false;
 
-    for (size_t i = 0; i < this->listaHospitales.size(); i++)
-    {
+    for (size_t i = 0; i < this->listaHospitales.size(); i++) {
         vector<Turno> turnosHospital = this->listaHospitales[i].getTurnos();
 
-        for (size_t j = 0; j < turnosHospital.size(); j++)
-        {
+        for (size_t j = 0; j < turnosHospital.size(); j++) {
             Turno t = turnosHospital[j];
 
-            if (t.getIdPaciente() == idBuscado)
-            {
+            if (t.getIdPaciente() == idBuscado) {
                 tieneTurnos = true;
                 cout << "Hospital: " << this->listaHospitales[i].getCodigo() << " | Fecha: " << t.getFecha() << " | Medico ID: " << t.getIdMedico() << endl;
             }
         }
     }
 
-    if (!tieneTurnos)
-    {
+    if (!tieneTurnos) {
         cout << "El paciente no tiene turnos registrados en ningun hospital." << endl;
     }
 }
 
+//B.4
+void SistemaHospitalario::mostrarEnOrden() {
+    ColaPrioridad copiaCola = listaDeEspera;
+    cout << "--- PACIENTES EN ESPERA (ORDEN DE PRIORIDAD) ---" <<endl;
+    while (!copiaCola.esVacia()) {
+        Paciente p = copiaCola.desencolar();
+        cout << "Prioridad: " << p.getPrioridad() << " | ID: " << p.getIdPaciente() <<  " | Cod. Hospital: " << p.getCodHospital() <<  " | DNI: " << p.getDni() << " | Fecha: " << p.getFechaIngreso() << " | Diagnostico: " << p.getDiagnostico() << endl;
+    }
+}
+
+void SistemaHospitalario::insertarPaciente(Paciente p) {
+    listaDeEspera.encolar(p);
+}
+
+Paciente SistemaHospitalario::extraerMasPrioritario() {
+    return listaDeEspera.desencolar();
+}
+
+void SistemaHospitalario::actualizarPrioridad(int id, int nuevaPrio) {
+    listaDeEspera.actualizarPrioridad(id, nuevaPrio);
+}
+
+bool SistemaHospitalario::listaPrioridadVacia() {
+    return listaDeEspera.esVacia();
+}
+
+//B.5
+void SistemaHospitalario::listarTurnosCronologicamente(int idMedico) {
+    vector<Turno> turnosDelMedico;
+
+    //Revisamos los turnos del medico en los distintos hospitales
+    for (size_t i = 0; i < this->listaHospitales.size(); i++) {
+        vector<Turno> turnosHospital = this->listaHospitales[i].getTurnos();
+
+        for (size_t j = 0; j < turnosHospital.size(); j++) {
+            if (turnosHospital[j].getIdMedico() == idMedico) {
+                turnosDelMedico.push_back(turnosHospital[j]);
+            }
+        }
+    }
+
+    //Que pasa si el medico no tiene turnos:
+    if (turnosDelMedico.empty()) {
+        cout << "No se encontraron turnos registrados para el Medico ID: " << idMedico << endl;
+        return;
+    }
+    
+    //Aplicamos Quicksort
+    SortUtils::quickSort(turnosDelMedico, [](const Turno &izquierdo, const Turno &derecho) {
+        return izquierdo.getFecha() < derecho.getFecha(); // Menor a mayor (cronológico)
+    });
+
+    //Listamos los turnos del Id ordenados cronologicamente
+    cout << "TURNOS CRONOLOGICOS DEL MEDICO ID: " << idMedico << endl;
+    for (size_t i = 0; i < turnosDelMedico.size(); i++) {
+        Turno t = turnosDelMedico[i];
+        cout << "- Fecha: " << t.getFecha() 
+             << " | Especialidad: " << t.getEspecialidad()
+             << " | Paciente ID: " << t.getIdPaciente() 
+             << " | Duracion: " << t.getDuracionMin() << " min." << endl;
+    }
+}
+
+// AGREGAR TURNO A HOSPITAL
+void SistemaHospitalario::agregarTurnoAHospital(string codigoHospital, Turno nuevoTurno) {
+    int indice = obtenerIndice(codigoHospital);
+
+    if (indice != -1) {
+        this->listaHospitales[indice].registrarTurno(nuevoTurno);
+    } else {
+        cout << "Error: El hospital con codigo " << codigoHospital << " no existe. No se pudo cargar el turno." << endl;
+    }
+}
+
+// REGISTRAR NUEVO PACIENTE
 void SistemaHospitalario::registrarPaciente(Paciente nuevoPaciente)
 {
     listaPacientes.push_back(nuevoPaciente);
@@ -526,6 +623,9 @@ void SistemaHospitalario::registrarPaciente(Paciente nuevoPaciente)
     }
 
 }
+
+
+/// *********** PARTE C ***************
 
 void SistemaHospitalario::insertarDiagnostico(string nombre, int frecuencia)
 {

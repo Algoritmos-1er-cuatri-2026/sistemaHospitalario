@@ -33,6 +33,8 @@ public:
     int getPrioridad();
 
     float getKg();
+
+    void setPrioridad(int nuevaPrio);
 };
 
 #endif

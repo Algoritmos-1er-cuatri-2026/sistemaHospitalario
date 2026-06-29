@@ -8,6 +8,7 @@
 #include "Derivacion.h"
 #include "Turno.h"
 #include "Insumo.h"
+#include "ColaPrioridad.h"
 #include "ArbolDeDiagnosticos.h"
 #include "ArbolAVLDiagnosticos.h"
 #include <vector>
@@ -41,6 +42,7 @@ private:
     vector<Paciente> listaPacientes;
     vector<Medico> medicos;
     vector<Derivacion> listaDerivaciones;
+    ColaPrioridad listaDeEspera;
 
     ArbolDeDiagnosticos arbolDiagnosticos;
     ArbolAVLDiagnosticos arbolAVLDiagnosticos;
@@ -80,10 +82,18 @@ public:
     vector<Hospital> ordenarPorDisponibilidad(Hospital hospital); // A.6?
 
     int calcularPacientesAtendidos(string codigoHospital, int fechaDesde, int fechaHasta); // Punto B.1
-    vector<Hospital> detectarSobrecargaDePacientes(int cantidad);                          // Punto B.2
-    void buscarTurnosPorDNI(int dni);                                                      // Punto B.3
-    void gestionarListaDeEspera(int codigo);                                               // Punto B.4
-    void listarTurnosCronologicamente(int idMedico);                                       // Punto B.5
+    void detectarSobrecargaDePacientes(int x); // Punto B.2
+    void buscarTurnosPorDNI(int dni); // Punto B.3
+
+    void insertarPaciente(Paciente p); // Punto B.4.1
+    Paciente extraerMasPrioritario(); // Punto B.4.2
+    void actualizarPrioridad(int id, int nuevaPrio); // Punto B.4.3
+    bool listaPrioridadVacia(); // Punto B.4
+    void mostrarEnOrden(); // Punto B.4
+
+    void listarTurnosCronologicamente(int idMedico); // Punto B.5
+    
+    
     void insertarDiagnostico(string nombre, int frecuencia);
 
     void incrementarFrecuenciaDiagnostico(string nombre);
