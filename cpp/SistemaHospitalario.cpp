@@ -445,6 +445,25 @@ int SistemaHospitalario::calcularPacientesAtendidos(string codigoHospital, int f
 }
 
 //B.2
+//Busqueda Binaria
+int buscarFinDeSemanaBinario(const vector<Turno>& turnos, int desdeIndice, int fechaLimite) {
+    int inicio = desdeIndice;
+    int fin = turnos.size() - 1;
+    int resultado = turnos.size();
+
+    while (inicio <= fin) {
+        int medio = inicio + (fin - inicio) / 2;
+
+        if (turnos[medio].getFecha() > fechaLimite) {
+            resultado = medio;
+            fin = medio - 1;
+        } else {
+            inicio = medio + 1;
+        }
+    }
+    return resultado;
+}
+
 void SistemaHospitalario::detectarSobrecargaDePacientes(int x) {
     cout << "--- REPORTES DE HOSPITALES CON SOBRECARGA ---" << endl;
     bool huboSobrecarga = false;
@@ -461,17 +480,20 @@ void SistemaHospitalario::detectarSobrecargaDePacientes(int x) {
 
         float porcentajeOcupacion = ((float)cantidadTurnos / capacidadCamas) * 100.0;
         bool superaPorFecha = false;
+        
         vector<Turno> turnosHospital = h.getTurnos();
 
-        for (size_t j = 0; j < turnosHospital.size(); j++) {
-            int ingresosEnSemana = 0;
-            int fechaInicio = turnosHospital[j].getFecha();
+        SortUtils::quickSort(turnosHospital, [](const Turno &a, const Turno &b) {
+            return a.getFecha() < b.getFecha();
+        });
 
-            for (size_t k = j; k < turnosHospital.size(); k++) {
-                if (turnosHospital[k].getFecha() - fechaInicio <= 6) {
-                    ingresosEnSemana++;
-                }
-            }
+        for (size_t j = 0; j < turnosHospital.size(); j++) {
+            int fechaInicio = turnosHospital[j].getFecha();
+            int fechaLimite = fechaInicio + 6;
+
+            int indiceLimite = buscarFinDeSemanaBinario(turnosHospital, j, fechaLimite);
+
+            int ingresosEnSemana = indiceLimite - j;
 
             if (ingresosEnSemana > x) {
                 superaPorFecha = true;
