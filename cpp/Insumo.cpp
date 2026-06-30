@@ -3,26 +3,19 @@
 
 Insumo::Insumo()
 {
-    this->idInsumo = 0;
     this->nombre = "";
     this->pesoKg = 0.0f;
     this->valorClinico = 0;
 }
 
-Insumo::Insumo(int idInsumo, string nombre, float pesoKg, int valorClinico)
+Insumo::Insumo(string nombre, float pesoKg, int valorClinico)
 {
-    this->idInsumo = idInsumo;
     this->nombre = nombre;
     this->pesoKg = pesoKg;
     this->valorClinico = valorClinico;
 }
 
 //Getters
-int Insumo::getIdInsumo() const
-{
-    return this->idInsumo;
-}
-
 string Insumo::getNombre() const
 {
     return this->nombre;
@@ -36,12 +29,6 @@ float Insumo::getPesoKg() const
 int Insumo::getValorClinico() const
 {
     return this->valorClinico;
-}
-
-//Setters, no veo que sean necesarios, pero los pongo igual
-void Insumo::setIdInsumo(int idInsumo)
-{
-    this->idInsumo = idInsumo;
 }
 
 void Insumo::setNombre(string nombre)
@@ -69,14 +56,13 @@ vector<Insumo> Insumo::leerDesdeArchivo(const string &rutaArchivo)
         return insumos;
     }
 
-    int idInsumo;
     string nombre;
     float pesoKg;
     int valorClinico;
 
-    while (archivoInsumos >> idInsumo >> nombre >> pesoKg >> valorClinico)
+    while (archivoInsumos >> nombre >> pesoKg >> valorClinico)
     {
-        insumos.push_back(Insumo(idInsumo, nombre, pesoKg, valorClinico));
+        insumos.push_back(Insumo(nombre, pesoKg, valorClinico));
     }
 
     return insumos;
@@ -93,8 +79,7 @@ bool Insumo::guardarEnArchivo(const vector<Insumo> &insumos, const string &rutaA
 
     for (size_t i = 0; i < insumos.size(); i++)
     {
-        archivoInsumos << insumos[i].getIdInsumo() << ' '
-                       << insumos[i].getNombre() << ' '
+        archivoInsumos << insumos[i].getNombre() << ' '
                        << insumos[i].getPesoKg() << ' '
                        << insumos[i].getValorClinico() << '\n';
     }

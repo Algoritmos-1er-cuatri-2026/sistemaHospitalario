@@ -611,11 +611,11 @@ int main()
             do
             {
                 cout << "===== GESTION DE AMBULANCIAS E INSUMOS =====" << endl;
-                cout << "1 - Agregar nuevo insumo a insumos.txt" << endl;
-                cout << "2 - Listar insumos de insumos.txt" << endl;
-                cout << "3 - Crear ambulancia" << endl;
-                cout << "4 - Resolver ambulancia con backtracking" << endl;
-                cout << "5 - Resolver ambulancia con branch and bound" << endl;
+                cout << "1 - Registrar nuevo insumo" << endl;
+                cout << "2 - Listar insumos" << endl;
+                cout << "3 - Crear ambulancia vacia" << endl;
+                cout << "4 - Resolver por backtracking puro" << endl;
+                cout << "5 - Resolver por branch and bound" << endl;
                 cout << "0 - Volver al menu principal" << endl;
                 cout << "Ingrese una opcion: ";
                 cin >> opcionAmbulanciaInsumo;
@@ -625,14 +625,11 @@ int main()
                 case 1:
                 {
                     vector<Insumo> insumos = Insumo::leerDesdeArchivo();
-                    int idInsumo;
                     string nombre;
                     float pesoKg;
                     int valorClinico;
 
-                    cout << "--- AGREGAR NUEVO INSUMO ---" << endl;
-                    cout << "Ingrese el id del insumo: ";
-                    cin >> idInsumo;
+                    cout << "--- REGISTRAR NUEVO INSUMO ---" << endl;
                     cout << "Ingrese el nombre del insumo: ";
                     cin >> nombre;
                     cout << "Ingrese el peso en kg: ";
@@ -640,7 +637,7 @@ int main()
                     cout << "Ingrese el valor clinico: ";
                     cin >> valorClinico;
 
-                    insumos.push_back(Insumo(idInsumo, nombre, pesoKg, valorClinico));
+                    insumos.push_back(Insumo(nombre, pesoKg, valorClinico));
 
                     if (Insumo::guardarEnArchivo(insumos))
                     {
@@ -658,7 +655,7 @@ int main()
                 {
                     vector<Insumo> insumos = Insumo::leerDesdeArchivo();
 
-                    cout << "--- LISTA DE INSUMOS ---" << endl;
+                    cout << "--- LISTADO DE INSUMOS ---" << endl;
                     if (insumos.empty())
                     {
                         cout << "No hay insumos cargados." << endl;
@@ -667,8 +664,7 @@ int main()
                     {
                         for (size_t i = 0; i < insumos.size(); i++)
                         {
-                            cout << i + 1 << ". ID: " << insumos[i].getIdInsumo()
-                                 << " | Nombre: " << insumos[i].getNombre()
+                            cout << i + 1 << ". Nombre: " << insumos[i].getNombre()
                                  << " | Peso: " << insumos[i].getPesoKg()
                                  << " | Valor clinico: " << insumos[i].getValorClinico() << endl;
                         }
@@ -682,7 +678,7 @@ int main()
                     int idAmbulancia;
                     float capacidad;
 
-                    cout << "--- CREAR AMBULANCIA ---" << endl;
+                    cout << "--- CREAR AMBULANCIA VACIA ---" << endl;
                     cout << "Ingrese el id de la ambulancia: ";
                     cin >> idAmbulancia;
                     cout << "Ingrese la capacidad de la ambulancia: ";
@@ -707,14 +703,13 @@ int main()
 
                         for (size_t i = 0; i < carga.size(); i++)
                         {
-                            cout << i + 1 << ". ID: " << carga[i].getIdInsumo()
-                                 << " | Nombre: " << carga[i].getNombre()
+                            cout << i + 1 << ". Nombre: " << carga[i].getNombre()
                                  << " | Peso: " << carga[i].getPesoKg()
                                  << " | Valor clinico: " << carga[i].getValorClinico() << endl;
                         }
                     }
 
-                    cout << "Use las opciones de resolucion para cargarla con backtracking o branch and bound." << endl;
+                    cout << "Use las opciones de resolucion para cargarla con backtracking puro o branch and bound." << endl;
 
                     volverAlMenu();
                     break;
@@ -724,7 +719,7 @@ int main()
                     int idAmbulancia;
                     float capacidad;
 
-                    cout << "--- RESOLVER AMBULANCIA CON BACKTRACKING ---" << endl;
+                    cout << "--- RESOLVER POR BACKTRACKING PURO ---" << endl;
                     cout << "Ingrese el id de la ambulancia: ";
                     cin >> idAmbulancia;
                     cout << "Ingrese la capacidad de la ambulancia: ";
@@ -741,7 +736,6 @@ int main()
                     for (size_t i = 0; i < resultado.insumosSeleccionados.size(); i++)
                     {
                         cout << i + 1 << ". " << resultado.insumosSeleccionados[i].getNombre()
-                             << " | ID: " << resultado.insumosSeleccionados[i].getIdInsumo()
                              << " | Peso: " << resultado.insumosSeleccionados[i].getPesoKg()
                              << " | Valor: " << resultado.insumosSeleccionados[i].getValorClinico() << endl;
                     }
@@ -754,7 +748,7 @@ int main()
                     int idAmbulancia;
                     float capacidad;
 
-                    cout << "--- RESOLVER AMBULANCIA CON BRANCH AND BOUND ---" << endl;
+                    cout << "--- RESOLVER POR BRANCH AND BOUND ---" << endl;
                     cout << "Ingrese el id de la ambulancia: ";
                     cin >> idAmbulancia;
                     cout << "Ingrese la capacidad de la ambulancia: ";
@@ -771,7 +765,6 @@ int main()
                     for (size_t i = 0; i < resultado.insumosSeleccionados.size(); i++)
                     {
                         cout << i + 1 << ". " << resultado.insumosSeleccionados[i].getNombre()
-                             << " | ID: " << resultado.insumosSeleccionados[i].getIdInsumo()
                              << " | Peso: " << resultado.insumosSeleccionados[i].getPesoKg()
                              << " | Valor: " << resultado.insumosSeleccionados[i].getValorClinico() << endl;
                     }

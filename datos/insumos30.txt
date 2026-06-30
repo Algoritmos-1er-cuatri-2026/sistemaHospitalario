@@ -1,30 +1,30 @@
-1 GasaEsteril 0.10 8
-2 Jeringa5ml 0.05 6
-3 VendasElastic 0.20 10
-4 GuantesLatex 0.08 7
-5 SueroFisiologico 0.50 14
-6 MascarillaN95 0.06 9
-7 TermometroDigital 0.15 11
-8 Alcohol70 0.30 12
-9 Curitas 0.04 4
-10 Oximetro 0.25 18
-11 Tensiometro 0.40 16
-12 Nebulizador 0.90 22
-13 Cateter 0.12 8
-14 Esparadrapo 0.03 3
-15 SolucionSalina 0.60 13
-16 BajaLengua 0.02 2
-17 AgujaHipodermica 0.01 1
-18 FajaAbdominal 0.35 15
-19 BolsaFrio 0.45 17
-20 KitSutura 0.55 19
-21 PortaSuero 1.20 24
-22 Inhalador 0.18 9
-23 VendaTriangular 0.14 8
-24 AlcoholGel 0.22 10
-25 Analgesicos 0.30 15
-26 Antiseptico 0.40 14
-27 Apositos 0.07 5
-28 TuboEndotraqueal 0.65 20
-29 CollarCervical 0.75 21
-30 TomaMuestras 0.28 13
+GasaEsteril 0.10 8
+Jeringa5ml 0.05 6
+VendasElastic 0.20 10
+GuantesLatex 0.08 7
+SueroFisiologico 0.50 14
+MascarillaN95 0.06 9
+TermometroDigital 0.15 11
+Alcohol70 0.30 12
+Curitas 0.04 4
+Oximetro 0.25 18
+Tensiometro 0.40 16
+Nebulizador 0.90 22
+Cateter 0.12 8
+Esparadrapo 0.03 3
+SolucionSalina 0.60 13
+BajaLengua 0.02 2
+AgujaHipodermica 0.01 1
+FajaAbdominal 0.35 15
+BolsaFrio 0.45 17
+KitSutura 0.55 19
+PortaSuero 1.20 24
+Inhalador 0.18 9
+VendaTriangular 0.14 8
+AlcoholGel 0.22 10
+Analgesicos 0.30 15
+Antiseptico 0.40 14
+Apositos 0.07 5
+TuboEndotraqueal 0.65 20
+CollarCervical 0.75 21
+TomaMuestras 0.28 13
