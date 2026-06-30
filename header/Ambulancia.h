@@ -49,6 +49,8 @@ public:
 
     ResultadoOptimizacion resolverBacktrackingPuro(const vector<Insumo> &listaInsumos) const;
     ResultadoOptimizacion resolverBranchAndBound(const vector<Insumo> &listaInsumos) const;
+    ResultadoOptimizacion resolverBacktrackingPuroDesdeArchivo();
+    ResultadoOptimizacion resolverBranchAndBoundDesdeArchivo();
 };
 
 #endif

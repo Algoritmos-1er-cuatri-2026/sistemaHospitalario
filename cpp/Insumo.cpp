@@ -1,4 +1,5 @@
 #include "../header/Insumo.h"
+#include <fstream>
 
 Insumo::Insumo()
 {
@@ -56,4 +57,47 @@ void Insumo::setPesoKg(float pesoKg)
 void Insumo::setValorClinico(int valorClinico)
 {
     this->valorClinico = valorClinico;
+}
+
+vector<Insumo> Insumo::leerDesdeArchivo(const string &rutaArchivo)
+{
+    vector<Insumo> insumos;
+    ifstream archivoInsumos(rutaArchivo);
+
+    if (!archivoInsumos.is_open())
+    {
+        return insumos;
+    }
+
+    int idInsumo;
+    string nombre;
+    float pesoKg;
+    int valorClinico;
+
+    while (archivoInsumos >> idInsumo >> nombre >> pesoKg >> valorClinico)
+    {
+        insumos.push_back(Insumo(idInsumo, nombre, pesoKg, valorClinico));
+    }
+
+    return insumos;
+}
+
+bool Insumo::guardarEnArchivo(const vector<Insumo> &insumos, const string &rutaArchivo)
+{
+    ofstream archivoInsumos(rutaArchivo, ios::trunc);
+
+    if (!archivoInsumos.is_open())
+    {
+        return false;
+    }
+
+    for (size_t i = 0; i < insumos.size(); i++)
+    {
+        archivoInsumos << insumos[i].getIdInsumo() << ' '
+                       << insumos[i].getNombre() << ' '
+                       << insumos[i].getPesoKg() << ' '
+                       << insumos[i].getValorClinico() << '\n';
+    }
+
+    return true;
 }

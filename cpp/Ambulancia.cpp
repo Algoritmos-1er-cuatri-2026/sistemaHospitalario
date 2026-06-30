@@ -1,13 +1,10 @@
 #include "../header/Ambulancia.h"
-#include <algorithm>
 
 namespace
 {
     constexpr float margenPeso = 0.0001f;
 
-    /*
-    // QuickSort propio para valor/peso. Deja comentado para ver si reemplaza a std::sort.
-
+    // QuickSort propio para valor/peso.
     bool esMayorRelacionValorPeso(const Insumo &primerInsumo, const Insumo &segundoInsumo)
     {
         float relacionPrimera = primerInsumo.getPesoKg() > 0.0f
@@ -59,7 +56,6 @@ namespace
             quickSortInsumos(insumos, indicePivote + 1, fin);
         }
     }
-    */
 }
 
 // Inicializa el resultado de la optimización sin elementos seleccionados ni nodos explorados.
@@ -258,9 +254,10 @@ Ambulancia::ResultadoOptimizacion Ambulancia::resolverBacktrackingPuro(const vec
 Ambulancia::ResultadoOptimizacion Ambulancia::resolverBranchAndBound(const vector<Insumo> &listaInsumos) const
 {
     vector<Insumo> listaOrdenada = listaInsumos;
-    // Reemplazar std::sort por quickSortInsumos?.
-    sort(listaOrdenada.begin(), listaOrdenada.end(), compararPorRelacionValorPeso);
-    // quickSortInsumos(listaOrdenada, 0, static_cast<int>(listaOrdenada.size()) - 1);
+    if (!listaOrdenada.empty())
+    {
+        quickSortInsumos(listaOrdenada, 0, static_cast<int>(listaOrdenada.size()) - 1);
+    }
 
     ResultadoOptimizacion mejorResultado;
     vector<Insumo> seleccionActual;
@@ -270,6 +267,24 @@ Ambulancia::ResultadoOptimizacion Ambulancia::resolverBranchAndBound(const vecto
     mejorResultado.nodosExplorados = nodosExplorados;
 
     return mejorResultado;
+}
+
+// Resuelve automaticamente por backtracking puro usando los insumos cargados desde el archivo fijo.
+Ambulancia::ResultadoOptimizacion Ambulancia::resolverBacktrackingPuroDesdeArchivo()
+{
+    vector<Insumo> listaInsumos = Insumo::leerDesdeArchivo("datos/insumos.txt");
+    ResultadoOptimizacion resultado = this->resolverBacktrackingPuro(listaInsumos);
+    this->cargaActual = resultado.insumosSeleccionados;
+    return resultado;
+}
+
+// Resuelve automaticamente por branch and bound usando los insumos cargados desde el archivo fijo.
+Ambulancia::ResultadoOptimizacion Ambulancia::resolverBranchAndBoundDesdeArchivo()
+{
+    vector<Insumo> listaInsumos = Insumo::leerDesdeArchivo("datos/insumos.txt");
+    ResultadoOptimizacion resultado = this->resolverBranchAndBound(listaInsumos);
+    this->cargaActual = resultado.insumosSeleccionados;
+    return resultado;
 }
 
 /*
