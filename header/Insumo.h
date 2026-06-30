@@ -26,6 +26,9 @@ public:
     void setNombre(string nombre);
     void setPesoKg(float pesoKg);
     void setValorClinico(int valorClinico);
+
+    static vector<Insumo> leerDesdeArchivo(const string &rutaArchivo = "datos/insumos.txt");
+    static bool guardarEnArchivo(const vector<Insumo> &insumos, const string &rutaArchivo = "datos/insumos.txt");
 };
 
 #endif
