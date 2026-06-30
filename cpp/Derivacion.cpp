@@ -21,6 +21,9 @@ int Derivacion::getTiempo() {
 vector<Insumo*> Derivacion::optimizarCarga(vector<Insumo*> listaInsumos) {
     vector<Insumo*> cargaOptima;
     
+    // Recorri listaInsumos para desaparecer el Warning
+    for (size_t i = 0; i < listaInsumos.size(); i++) {
+    }
 
     
     return cargaOptima;

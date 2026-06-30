@@ -1,5 +1,5 @@
-HGA HospitalGarrahan BuenosAires 500 Pediatria,Cardiologia 320 15000000 
-HIT HospitalItaliano Cordoba 300 Traumatologia,Neurologia 190 9000000
+HGA HospitalGarrahan BuenosAires 3 Pediatria,Cardiologia 320 15000000 
+HIT HospitalItaliano Cordoba 100 Traumatologia,Neurologia 190 9000000
 HCO HospitalCordoba Cordoba 400 Neumonologia,Infectologia 210 10000000
 HCL HospitalDeClinicas BuenosAires 450 Pediatria,Cirugia 280 12000000
 HAU HospitalAustral Pilar 200 Oncologia,Trasplantes 150 20000000
