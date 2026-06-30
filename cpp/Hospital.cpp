@@ -13,6 +13,9 @@ Hospital::Hospital(string codigo, string nombre, string ciudad, int capacidadCam
     this->presupuestoAnual = presupuestoAnual;
 }
     
+Hospital::Hospital() {
+}
+
 string Hospital::getCodigo() {
     return this->codigo;
 }
