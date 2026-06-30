@@ -217,14 +217,7 @@ int main()
                     int criterio;
                     cout << "Ingrese 1 para odernar por camas, 2 por personal medico, 3 por presupuesto anual : " << endl;
                     cin >> criterio;
-                    vector<Hospital> ordenados = sistema.listarHospitales(criterio);
-                    for (size_t i = 0; i < ordenados.size(); i++)
-                    {
-                        cout << i + 1 << ". Codigo: " << ordenados[i].getCodigo();
-                        cout << " | Camas: " << ordenados[i].getCapacidad();
-                        cout << " | Personal: " << ordenados[i].getPersonal();
-                        cout << " | Presupuesto: $" << ordenados[i].getPresupuesto() << endl;
-                    }
+                    sistema.listarHospitales(criterio);
                     break;
                 }
                 case 5:

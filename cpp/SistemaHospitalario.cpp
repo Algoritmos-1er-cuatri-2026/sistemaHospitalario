@@ -7,16 +7,15 @@
 using namespace std;
 
 void SistemaHospitalario::mostrarInformacionDeHospital(string codigo)
-{ // PUNTO 1.
-    for (size_t i = 0; i < listaHospitales.size(); i++)
+{ 
+    int indice = obtenerIndice(codigo);
+    if (indice == -1)
     {
-        if (this->listaHospitales[i].getCodigo() == codigo)
-        {
-            listaHospitales[i].mostrarInformacion();
-            return;
-        }
+        cout<<"El codigo ingresado no corresponde a un hospital valido";
+        return;
     }
-    cout << "No existe el hospital ingresado \n";
+    this->listaHospitales[indice].mostrarInformacion();
+    
 }
 
 void SistemaHospitalario::registrarHospital(Hospital nuevoHospital)
@@ -210,7 +209,7 @@ bool esMayor(Hospital a, Hospital b, int criterio)
     return false;
 }
 
-int particion(vector<Hospital> &arr, int inicio, int fin, int criterio)
+int particion(Hospital* arr, int inicio, int fin, int criterio)
 {
     Hospital pivote = arr[fin]; // Elegimos el último elemento como pivote
     int i = inicio - 1;         // marca la zona donde se terminan los hospitales mayores al pivote
@@ -233,7 +232,7 @@ int particion(vector<Hospital> &arr, int inicio, int fin, int criterio)
     return i + 1;
 }
 
-void quickSort(vector<Hospital> &arr, int inicio, int fin, int criterio)
+void quickSort(Hospital* arr, int inicio, int fin, int criterio)
 {
     if (inicio < fin)
     {
@@ -244,13 +243,28 @@ void quickSort(vector<Hospital> &arr, int inicio, int fin, int criterio)
     }
 }
 
-vector<Hospital> SistemaHospitalario::listarHospitales(int criterio)
+void SistemaHospitalario::listarHospitales(int criterio)
 {
-    vector<Hospital> listaOrdenada = this->listaHospitales;
 
-    quickSort(listaOrdenada, 0, listaOrdenada.size() - 1, criterio);
+    int cantidadHospitales = this->listaHospitales.size();
 
-    return listaOrdenada;
+    Hospital* vectorHeap = new Hospital[cantidadHospitales];
+
+    for (int i = 0; i < cantidadHospitales; i++)
+    {
+        vectorHeap[i] = this->listaHospitales[i];
+    }
+
+    quickSort(vectorHeap,0,cantidadHospitales-1,criterio);
+   
+    for (int i = 0; i < cantidadHospitales; i++)
+                    {
+                        cout << i + 1 << ". Codigo: " << vectorHeap[i].getCodigo();
+                        cout << " | Camas: " << vectorHeap[i].getCapacidad();
+                        cout << " | Personal: " << vectorHeap[i].getPersonal();
+                        cout << " | Presupuesto: $" << vectorHeap[i].getPresupuesto() << endl;
+                    }
+    delete[] vectorHeap;
 }
 
 // DIJKSTRA
@@ -292,7 +306,11 @@ void SistemaHospitalario::ejecutarDijkstra(int indiceOrigen, const vector<vector
 
     distancia.assign(n, INF);
     padre.assign(n, -1);
-    vector<bool> visitado(n, false);
+
+    bool* visitado = new bool[n];
+    for(int i = 0; i < n; i++) {
+        visitado[i] = false;
+    }
 
     distancia[indiceOrigen] = 0;
 
@@ -326,6 +344,7 @@ void SistemaHospitalario::ejecutarDijkstra(int indiceOrigen, const vector<vector
             }
         }
     }
+    delete[] visitado;
 }
 
 void SistemaHospitalario::calcularRutaMasRapida(string origen, string destino)
@@ -410,14 +429,24 @@ void SistemaHospitalario::buscarPorEspecialidad(string especialidad)
     }
 
     // ordenamos reutilizando el quicskort del punto 4 ya que el criterio 1 era camas.
+    int cantidadHospitalesFiltrados = hospitalesFiltrados.size();
 
-    quickSort(hospitalesFiltrados, 0, hospitalesFiltrados.size() - 1, 1);
+    Hospital* vectorHeapFiltrados = new Hospital[cantidadHospitalesFiltrados];
+
+    for (int i = 0; i < cantidadHospitalesFiltrados; i++)
+    {
+        vectorHeapFiltrados[i] = hospitalesFiltrados[i];
+    }
+    
+    quickSort(vectorHeapFiltrados, 0, hospitalesFiltrados.size() - 1, 1);
 
     cout << "\n--- Hospitales con especialidad en " << especialidad << " ---" << endl;
-    for (Hospital h : hospitalesFiltrados)
+    for (int i = 0; i < cantidadHospitalesFiltrados; i++)
     {
-        cout << "Hospital: " << h.getCodigo() << " | Camas disponibles: " << h.getCapacidad() << " | Especialidades totales : " << h.getEspecialidades() << endl;
+        Hospital h = vectorHeapFiltrados[i];
+         cout << "Hospital: " << h.getCodigo() << " | Camas disponibles: " << h.getCapacidad() << " | Especialidades totales : " << h.getEspecialidades() << endl;
     }
+    delete[] vectorHeapFiltrados;
 }
 
 /// *********** PARTE B ***************

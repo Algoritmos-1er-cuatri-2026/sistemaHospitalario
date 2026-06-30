@@ -66,7 +66,7 @@ public:
     string obtenerHospitalMasCercano(string codigoOrigen); // Punto A.3
 
     void mostrarPacientes();
-    vector<Hospital> listarHospitales(int filtro); // Punto A.4
+    void listarHospitales(int filtro); // Punto A.4
 
     void calcularRutaMasRapida(string codigoOrigen, string codigoDestino);                                                                     // A.5
     void agregarDerivacion(Derivacion d);                                                                                                      // Punto A.5

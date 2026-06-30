@@ -25,6 +25,7 @@ private:
 
 
 public:
+    Hospital();
     Hospital(string codigo, string nombre, string ciudad, int capacidadCamas, string especialidades, int personalMedico, int presupuestoAnual);
     void agregarNuevoHospital();
     bool tieneEspecialidad(string especialidad);
