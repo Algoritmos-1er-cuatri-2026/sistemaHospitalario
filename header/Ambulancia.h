@@ -45,7 +45,6 @@ public:
     const vector<Insumo> &getCarga() const;
 
     bool quedaLugar() const;
-    void agregarInsumo(Insumo unInsumo);
 
     ResultadoOptimizacion resolverBacktrackingPuro(const vector<Insumo> &listaInsumos) const;
     ResultadoOptimizacion resolverBranchAndBound(const vector<Insumo> &listaInsumos) const;

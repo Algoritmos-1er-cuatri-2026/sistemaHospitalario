@@ -224,19 +224,6 @@ bool Ambulancia::quedaLugar() const
     return this->getPesoCargado() + margenPeso < this->capacidad;
 }
 
-
-
-
-
-// Agrega un insumo a la carga solo si no supera el límite de peso permitido.
-void Ambulancia::agregarInsumo(Insumo unInsumo)
-{
-    if (this->getPesoCargado() + unInsumo.getPesoKg() <= this->capacidad + margenPeso)
-    {
-        this->cargaActual.push_back(unInsumo);
-    }
-}
-
 // Ejecuta el algoritmo de backtracking puro y devuelve la mejor combinación hallada.
 Ambulancia::ResultadoOptimizacion Ambulancia::resolverBacktrackingPuro(const vector<Insumo> &listaInsumos) const
 {
