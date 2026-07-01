@@ -58,22 +58,39 @@ disponibilidad de camas.
 - Administrar la lista de espera de la guardia utilizando una cola de prioridad (Min-Heap).
 - Listar los turnos de un médico ordenados cronológicamente mediante QuickSort genérico.
 
-### Punto C - Árbol De Diagnósticos
+### Punto C - Árbol de Diagnósticos
 
-El sistema mantiene un árbol binario de búsqueda de diagnósticos ordenado por frecuencia de aparición. En caso de empate de frecuencia, se utiliza el nombre del diagnóstico como criterio secundario para mantener un orden total.
+El sistema implementa un Árbol Binario de Búsqueda (BST) para gestionar los diagnósticos registrados junto con su frecuencia de aparición.
 
-También se implementa una versión AVL para comparar la altura resultante contra el BST simple.
+El criterio de orden utilizado es:
 
-Funcionalidades implementadas:
+- Frecuencia del diagnóstico.
+- En caso de empate, orden alfabético por nombre.
+
+Como extensión del trabajo también se implementó un Árbol AVL independiente que permite comparar la altura obtenida respecto al BST utilizando el mismo conjunto de diagnósticos.
+
+#### Funcionalidades implementadas
 
 - Insertar diagnóstico con frecuencia inicial.
 - Incrementar frecuencia de un diagnóstico existente.
-- Listar diagnósticos mediante recorrido inorder.
-- Encontrar el diagnóstico más frecuente.
-- Eliminar diagnóstico manteniendo la propiedad BST.
-- Calcular altura del árbol.
+- Listar diagnósticos mediante recorrido Inorder.
+- Mostrar el diagnóstico más frecuente.
+- Eliminar diagnóstico manteniendo la propiedad del BST.
+- Calcular la altura del árbol.
 - Detectar desbalance.
-- Comparar altura entre BST y AVL.
+- Comparar la altura entre el BST y el AVL.
+
+#### Complejidad
+
+| Funcionalidad | BST | AVL |
+|--------------|-----|-----|
+| Insertar | O(h) | O(log n) |
+| Incrementar frecuencia | O(h) | O(log n) |
+| Buscar por nombre | O(n) | O(n) |
+| Eliminar | O(h) | O(log n) |
+| Diagnóstico más frecuente | O(h) | O(log n) |
+| Listar diagnósticos | O(n) | O(n) |
+| Calcular altura | O(n) | O(n) |
 
 ### Punto D - Optimización de Insumos con Backtracking 
 - Optimización de Carga Insumos (Backtracking Puro):** Seleccionar el subconjunto de insumos médicos que maximice el valor clínico total sin superar el límite de peso de la ambulancia mediante exploración exhaustiva.
@@ -240,16 +257,102 @@ Desde la raíz del proyecto:
 1. Seleccionar `5 - Listar turnos de medico en orden cronologico`.
 2. Ingrese el DNI del paciente: `2001`
 
-### Ejemplo de uso para Punto C:
+### Ejemplo de uso para Punto C
 
-Desde el menú principal:
+Desde el menú principal seleccionar:
 
-1. Seleccionar `3 - Arbol de Diagnosticos`.
-2. Seleccionar `1 - Insertar diagnostico`.
-3. Ingresar nombre y frecuencia inicial.
-4. Seleccionar `2 - Incrementar frecuencia`.
-5. Seleccionar `3 - Listar diagnosticos`.
-6. Seleccionar `10 - Comparar alturas BST y AVL`.
-Y algo de memoria dinámica:
+`3 - Árbol de Diagnósticos`
 
-Los diagnósticos se crean dinámicamente con `new`. Para evitar fugas de memoria, ambos árboles implementan destructores recursivos que liberan los nodos restantes al finalizar la vida útil de la estructura. Además, al eliminar un diagnóstico se libera explícitamente el nodo correspondiente con `delete`.
+---
+
+#### C.1 - Insertar diagnóstico
+
+Permite registrar un nuevo diagnóstico indicando su nombre y frecuencia inicial. El diagnóstico se inserta en el Árbol Binario de Búsqueda (BST) respetando el criterio de orden por frecuencia y nombre, y simultáneamente se incorpora al Árbol AVL para mantener ambas estructuras sincronizadas.
+
+**Ejemplo de uso**
+
+1. Seleccionar `1 - Insertar diagnóstico`.
+2. Ingresar nombre: `Covid`.
+3. Ingresar frecuencia inicial: `1`.
+
+---
+
+#### C.2 - Incrementar frecuencia
+
+Permite actualizar la frecuencia de aparición de un diagnóstico existente. Como la frecuencia forma parte del criterio de orden, el diagnóstico se elimina temporalmente y se reinserta con la nueva frecuencia tanto en el BST como en el AVL, preservando las propiedades de ambas estructuras.
+
+**Ejemplo de uso**
+
+1. Seleccionar `2 - Incrementar frecuencia`.
+2. Ingresar el nombre del diagnóstico: `Covid`.
+
+---
+
+#### C.3 - Listar diagnósticos
+
+Muestra todos los diagnósticos ordenados mediante un recorrido **Inorder**. Debido al criterio de orden utilizado, los diagnósticos se presentan de menor a mayor frecuencia y, en caso de empate, ordenados alfabéticamente por nombre.
+
+**Ejemplo de uso**
+
+1. Seleccionar `3 - Listar diagnósticos (BST)`.
+
+---
+
+#### C.4 - Mostrar diagnóstico más frecuente
+
+Obtiene el diagnóstico con mayor frecuencia registrada recorriendo el árbol según el criterio de orden implementado.
+
+**Ejemplo de uso**
+
+1. Seleccionar `4 - Mostrar diagnóstico más frecuente`.
+
+---
+
+#### C.5 - Eliminar diagnóstico
+
+Permite eliminar un diagnóstico del árbol manteniendo la propiedad del BST. Se contemplan los casos clásicos de eliminación (hoja, un hijo o dos hijos) y el AVL se actualiza para conservar el balance de la estructura.
+
+**Ejemplo de uso**
+
+1. Seleccionar `5 - Eliminar diagnóstico`.
+2. Ingresar el nombre del diagnóstico: `Covid`.
+
+---
+
+#### C.6 - Calcular altura y detectar desbalance
+
+Calcula la altura del Árbol Binario de Búsqueda y determina si se encuentra desbalanceado según el criterio establecido en la consigna. Esta funcionalidad permite analizar el comportamiento del BST frente al AVL.
+
+**Ejemplo de uso**
+
+1. Seleccionar `6 - Mostrar altura del árbol BST`.
+2. Seleccionar `7 - Detectar desbalance del BST`.
+
+---
+
+#### C.7 - Comparación entre BST y AVL
+
+Como extensión del trabajo, se implementó un Árbol AVL independiente que almacena el mismo conjunto de diagnósticos que el BST. Esta opción permite visualizar ambas estructuras y comparar sus alturas para observar la diferencia entre un árbol binario de búsqueda simple y un árbol auto-balanceado.
+
+**Ejemplo de uso**
+
+1. Seleccionar `8 - Mostrar árbol BST`.
+2. Seleccionar `9 - Mostrar árbol AVL`.
+3. Seleccionar `10 - Comparar alturas BST y AVL`.
+4. Seleccionar `11 - Listar diagnósticos AVL`.
+
+---
+
+### Manejo de memoria dinámica
+
+Los diagnósticos se crean dinámicamente mediante `new`, por lo que fue necesario implementar una correcta administración de memoria.
+
+Ambos árboles poseen destructores recursivos que recorren la estructura en postorden liberando cada nodo mediante `delete`. Además, cuando un diagnóstico es eliminado individualmente, la memoria correspondiente también se libera explícitamente, evitando pérdidas de memoria durante la ejecución del sistema.
+
+### Justificación del diseño
+
+Se eligió un Árbol Binario de Búsqueda para mantener los diagnósticos ordenados por frecuencia de aparición, permitiendo obtener el diagnóstico más frecuente de forma eficiente y listar los diagnósticos ordenados mediante un recorrido Inorder.
+
+Como varios diagnósticos pueden compartir la misma frecuencia, se utilizó el nombre como criterio secundario de orden para garantizar un orden total dentro del árbol.
+
+Además, se implementó un Árbol AVL como extensión con el objetivo de comparar el comportamiento de ambas estructuras. Mientras que el BST puede desbalancearse dependiendo del orden de inserción, el AVL mantiene una altura logarítmica mediante rotaciones automáticas, mejorando el rendimiento de las operaciones de inserción, búsqueda y eliminación cuando el árbol crece.
