@@ -1,5 +1,7 @@
 # Sistema De Gestión Hospitalaria
+## GRUPO 3
 
+## INTEGRANTES: Octavio Cecio, Matias Diaz, Ariel Valenzuela, Cesar Gerace
 ## Descripción General
 Este sistema es un Trabajo Práctico desarrollado para la materia **Algoritmos**. Consiste en una aplicación de consola en C++ diseñada para administrar de manera eficiente redes hospitalarias, asignación de turnos médicos, flujos de pacientes mediante prioridades y la clasificación de diagnósticos clínicos.
 ## Requisitos
@@ -222,6 +224,11 @@ Desde la raíz del proyecto:
 
 1. Seleccionar desde el menu principal `2 - Gestion de Pacientes y Turnos`.
 
+### Consideraciones
+
+> Se trabajo los Turnos y Pacientes como vectores dentro de Hospital y SistemaHospitalario
+> Para las tareas que requieren ordenamiento temporal, se reutiliza una función genérica de Quicksort que esta en Sort, para por ejemplo ordenar según el campo fecha.
+
 #### Ejemplo de uso para Punto B.1
 
 2. Seleccionar `1 - Total pacientes atendidos por hospital/fecha`.
@@ -229,17 +236,28 @@ Desde la raíz del proyecto:
 3. Ingrese fecha de inicio (AAAAMMDD): `20260601`
 4. Ingrese fecha de fin (AAAAMMDD): `20260607`
 
+> Complejidad Temporal: O(T), donde T es la cantidad total de turnos que posee el hospital seleccionado.
+> Estructura: El uso de vector<Turno> es por si el ingreso de datos es secuencial y masivo.
+> Alternativa de Mejora: Si los turnos ya se guardaran ordenados por fecha de manera nativa en el vector, se podría aplicar una Búsqueda Binaria para encontrar los índices de inicio y fin del rango, reduciendo la complejidad de filtrado a O(log T).
+
 #### Ejemplo de uso para Punto B.2
 
-1. Seleccionar `2 - Gestion de Pacientes y Turnos`.
-2. Seleccionar `2 - Detectar hospitales con sobrecarga`.
-3. Ingrese la cantidad maxima de ingresos semanales permitidos: `3`
-4. Probar devuelta con: `5`
+1. Seleccionar `2 - Detectar hospitales con sobrecarga`.
+2. Ingrese la cantidad maxima de ingresos semanales permitidos: `3`
+3. Probar devuelta con: `5`
+
+> Complejidad Temporal: O(H .(T .log T)) , donde H es la cantidad de hospitales y T el número de turnos del hospital. Por cada hospital se ejecuta un quickSort sobre sus turnos y luego, para cada turno, se hace una búsqueda binaria.
+> Estructura: Al no estar ordenados cronológicamente los turnos desde el inicio, la combinación de quickSort junto con la búsqueda binaria evita tener que hacer un doble for anidado cuadrático O(T^2) por cada hospital.
+> Alternativa de Mejora: Insertar los turnos ordenados desde el principio.
 
 #### Ejemplo de uso para Punto B.3
 
 1. Seleccionar `3 - Buscar turnos de un paciente (DNI)`.
 2. Ingrese el DNI del paciente: `45000111`
+
+> Complejidad Temporal: O(P + H . T), donde P es la cantidad total de pacientes en el sistema, H es la cantidad de hospitales y T es la cantidad promedio de turnos por hospital.
+> Estructura: La estructura actual obliga a realizar búsquedas lineales.
+> Alternativa de Mejora: -
 
 #### Ejemplo de uso para Punto B.4
 
@@ -252,10 +270,18 @@ Desde la raíz del proyecto:
 7. Devuelta en el Menu seleccionamos `1 - Insertar Paciente a Cola de Prioridad`.
 8. Ingresamos como Hospital: `HGA`, ID: `10`, DNI: `40555666`, Fecha: `20260630`, Diagnostico: `Fractura`, Prioridad: `1` y Peso: `60`
 
+> Complejidad Temporal: O(log N)
+> Estructura: Se utilizó una Cola de Prioridad (Min-Heap) mediante la clase ColaPrioridad. Es la estructura ideal para este problema ya que garantiza un acceso inmediato al paciente más urgente de forma eficiente
+> Alternativa de Mejora: -
+
 #### Ejemplo de uso para Punto B.5
 
 1. Seleccionar `5 - Listar turnos de medico en orden cronologico`.
 2. Ingrese el DNI del paciente: `2001`
+
+> Complejidad Temporal: O(H . T + M . log M), donde H es la cantidad de hospitales, $T$ es el promedio de turnos por hospital, y $M$ es la cantidad de turnos específicos que pertenecen al médico consultado
+> Estructura: -
+> Alternativa de Mejora: -
 
 ### Ejemplo de uso para Punto C
 
