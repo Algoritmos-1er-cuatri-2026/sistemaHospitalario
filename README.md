@@ -1,7 +1,5 @@
 # Sistema De Gestión Hospitalaria
-## GRUPO 3
 
-## INTEGRANTES: Octavio Cecio, Matias Diaz, Ariel Valenzuela, Cesar Gerace
 ## Descripción General
 Este sistema es un Trabajo Práctico desarrollado para la materia **Algoritmos**. Consiste en una aplicación de consola en C++ diseñada para administrar de manera eficiente redes hospitalarias, asignación de turnos médicos, flujos de pacientes mediante prioridades y la clasificación de diagnósticos clínicos.
 ## Requisitos
@@ -60,49 +58,209 @@ disponibilidad de camas.
 - Administrar la lista de espera de la guardia utilizando una cola de prioridad (Min-Heap).
 - Listar los turnos de un médico ordenados cronológicamente mediante QuickSort genérico.
 
-### Punto C - Árbol de Diagnósticos
+### Punto C - Árbol De Diagnósticos
 
-El sistema implementa un Árbol Binario de Búsqueda (BST) para gestionar los diagnósticos registrados junto con su frecuencia de aparición.
+El sistema mantiene un árbol binario de búsqueda de diagnósticos ordenado por frecuencia de aparición. En caso de empate de frecuencia, se utiliza el nombre del diagnóstico como criterio secundario para mantener un orden total.
 
-El criterio de orden utilizado es:
+También se implementa una versión AVL para comparar la altura resultante contra el BST simple.
 
-- Frecuencia del diagnóstico.
-- En caso de empate, orden alfabético por nombre.
-
-Como extensión del trabajo también se implementó un Árbol AVL independiente que permite comparar la altura obtenida respecto al BST utilizando el mismo conjunto de diagnósticos.
-
-#### Funcionalidades implementadas
+Funcionalidades implementadas:
 
 - Insertar diagnóstico con frecuencia inicial.
 - Incrementar frecuencia de un diagnóstico existente.
-- Listar diagnósticos mediante recorrido Inorder.
-- Mostrar el diagnóstico más frecuente.
-- Eliminar diagnóstico manteniendo la propiedad del BST.
-- Calcular la altura del árbol.
+- Listar diagnósticos mediante recorrido inorder.
+- Encontrar el diagnóstico más frecuente.
+- Eliminar diagnóstico manteniendo la propiedad BST.
+- Calcular altura del árbol.
 - Detectar desbalance.
-- Comparar la altura entre el BST y el AVL.
+- Comparar altura entre BST y AVL.
 
-#### Complejidad
+### Punto D - Optimización de Insumos con Backtracking
 
-| Funcionalidad | BST | AVL |
-|--------------|-----|-----|
-| Insertar | O(h) | O(log n) |
-| Incrementar frecuencia | O(h) | O(log n) |
-| Buscar por nombre | O(n) | O(n) |
-| Eliminar | O(h) | O(log n) |
-| Diagnóstico más frecuente | O(h) | O(log n) |
-| Listar diagnósticos | O(n) | O(n) |
-| Calcular altura | O(n) | O(n) |
+## Estructura Relacionada Al Módulo
+- **`header/Ambulancia.h`**: interfaz de la clase `Ambulancia`.
+- **`cpp/Ambulancia.cpp`**: implementación de la optimización de carga.
+- **`header/Insumo.h`**: interfaz de la clase `Insumo`.
+- **`cpp/Insumo.cpp`**: implementación de lectura y guardado de insumos.
+- **`datos/insumos.txt`**: archivo de texto con los insumos disponibles.
 
-### Punto D - Optimización de Insumos con Backtracking 
-- Optimización de Carga Insumos (Backtracking Puro):** Seleccionar el subconjunto de insumos médicos que maximice el valor clínico total sin superar el límite de peso de la ambulancia mediante exploración exhaustiva.
-- Optimización Eficiente (Branch & Bound):** Optimizar la carga aplicando podas al árbol de decisión para descartar ramas innecesarias cuando el valor potencial no supere al mejor ya encontrado.
-- Comparar la cantidad de nodos explorados entre la versión con poda y sin poda utilizando distintos tamaños de entrada ($n = 10, 20, 30$).
-- Determinar el costo computacional de ambos enfoques y evaluar la viabilidad de la Programación Dinámica como alternativa eficiente.
+## Clases Implementadas
 
-## Ejemplo de Uso
+### Insumo
+Representa un insumo médico con:
+- nombre
+- peso en kg
+- valor clínico
 
-Desde la raíz del proyecto:
+También incluye métodos estáticos para:
+- leer insumos desde archivo
+- guardar la lista de insumos en archivo
+
+### Ambulancia
+Representa una ambulancia con:
+- id
+- capacidad máxima
+- carga actual
+
+La clase implementa:
+- optimización por backtracking puro
+- optimización por branch and bound
+- cálculo del peso cargado
+- verificación de espacio disponible
+- almacenamiento de la mejor carga encontrada
+
+## Funcionalidades Implementadas
+
+### 1. Cargar y listar insumos
+El menú permite leer los insumos desde `datos/insumos.txt`, mostrarlos por pantalla y agregar nuevos insumos al archivo.
+
+### 2. Crear una ambulancia
+Se puede ingresar un id y una capacidad para crear una ambulancia vacía. El sistema muestra:
+- id de la ambulancia
+- capacidad total
+- peso cargado actual
+- si todavía queda lugar disponible
+
+### 3. Resolver por Backtracking Puro
+Este método analiza todas las combinaciones posibles de insumos y devuelve la mejor selección que no supera la capacidad.
+
+Complejidad:
+- Mejor caso: $\Theta(2^n)$, porque igual debe revisar el espacio completo de decisiones.
+- Peor caso: $\Theta(2^n)$, ya que recorre todo el árbol binario de inclusión/exclusión.
+
+Cantidad de nodos recorridos:
+- Recorre todos los nodos del árbol de decisiones: $2^{n+1} - 1$.
+- Para $n = 3$, el recorrido completo tiene $2^{4} - 1 = 15$ nodos.
+
+Ejemplo corto con 3 insumos:
+```txt
+Capacidad de la ambulancia: 5.0 kg
+Insumos disponibles:
+1. gasas   | peso: 2.0 | valor: 4
+2. vendas  | peso: 3.0 | valor: 5
+3. suero   | peso: 4.0 | valor: 7
+```
+
+Resultado posible por backtracking puro:
+```txt
+Seleccion: gasas + vendas
+Peso total: 5.0 kg
+Valor total: 9
+```
+
+### 4. Resolver por Branch and Bound
+Este método ordena los insumos por relación valor/peso y aplica poda para descartar ramas que no pueden superar la mejor solución encontrada.
+
+Nota importante:
+- Branch and Bound necesita trabajar sobre el vector de insumos ordenado por relación valor/peso.
+- Esto se hace porque la cota superior se calcula tomando primero los insumos más convenientes; así la estimación optimista es más fuerte y la poda funciona mejor.
+- Si el vector no está ordenado, la cota puede ser menos informativa y el algoritmo termina explorando más ramas de las necesarias.
+- El ordenamiento no cambia la solución óptima final, pero sí mejora la eficiencia del recorrido.
+
+Complejidad:
+- Mejor caso: cercana a $\Theta(n)$ para la exploración, más el costo de ordenar los insumos, porque la poda elimina gran parte del árbol.
+- Peor caso: $\Theta(2^n)$, si la poda no logra descartar suficientes ramas.
+
+Cantidad de nodos recorridos:
+- Es variable y depende de cuántas ramas puedan podarse.
+- En el mejor caso recorre muchos menos nodos que el backtracking puro.
+- En el peor caso puede llegar al mismo orden que el árbol completo: $2^{n+1} - 1$.
+- Para $n = 3$, el máximo teórico también es 15 nodos, pero normalmente Branch and Bound recorre menos.
+
+Ejemplo corto con los mismos 3 insumos:
+```txt
+Capacidad de la ambulancia: 5.0 kg
+Insumos ordenados por relacion valor/peso:
+1. gasas   | 4/2 = 2.0
+2. suero   | 7/4 = 1.75
+3. vendas  | 5/3 = 1.66
+```
+
+Resultado posible por branch and bound:
+```txt
+Seleccion: gasas + vendas
+Peso total: 5.0 kg
+Valor total: 9
+```
+
+### Nota Sobre El QuickSort Implementado
+El ordenamiento interno del módulo se resuelve con un QuickSort propio sobre el vector de insumos.
+
+Funcionamiento general:
+- Se elige como pivote el último insumo del tramo actual.
+- Se recorren los elementos y se colocan a la izquierda los que tienen mayor relación valor/peso que el pivote.
+- Al finalizar la partición, el pivote queda en su posición definitiva.
+- Luego se repite el proceso recursivamente sobre la parte izquierda y la parte derecha.
+
+Criterio de orden:
+- Primero se compara la relación valor clínico / peso.
+- Si dos insumos tienen la misma relación, se desempata por valor clínico total.
+
+Idea del algoritmo:
+- Es un ordenamiento in-place, porque reorganiza el mismo vector sin usar una estructura auxiliar grande.
+- Su mejor caso es $\Theta(n \log n)$ y su peor caso es $\Theta(n^2)$, dependiendo de cómo queden los pivotes.
+- En este proyecto se usa para preparar los insumos antes de aplicar Branch and Bound.
+
+### 5. Comparar nodos explorados
+Ambos enfoques devuelven la cantidad de nodos explorados, lo que permite comparar el costo de exploración entre la versión exhaustiva y la versión con poda.
+
+## Menú Del Sistema
+La opción correspondiente en el menú principal es:
+
+`4 - Gestion de ambulancias e insumos`
+
+Dentro de ese submenú se encuentran las siguientes opciones:
+- `1 - Registrar nuevo insumo`
+- `2 - Listar insumos`
+- `3 - Crear ambulancia vacia`
+- `4 - Resolver por backtracking puro`
+- `5 - Resolver por branch and bound`
+
+## Formato Del Archivo De Insumos
+Cada línea de `datos/insumos.txt` debe seguir este formato:
+
+```txt
+nombre pesoKg valorClinico
+```
+
+Ejemplo:
+
+```txt
+gasas 0.2 5
+vendas 0.3 8
+suero 1.0 10
+```
+
+## Ejemplo De Uso
+
+### Agregar un insumo
+1. Seleccionar `4 - Gestion de ambulancias e insumos`.
+2. Seleccionar `1 - Registrar nuevo insumo`.
+3. Ingresar el nombre, peso y valor clínico.
+
+### Listar insumos
+1. Seleccionar `4 - Gestion de ambulancias e insumos`.
+2. Seleccionar `2 - Listar insumos`.
+
+### Crear una ambulancia
+1. Seleccionar `4 - Gestion de ambulancias e insumos`.
+2. Seleccionar `3 - Crear ambulancia vacia`.
+3. Ingresar el id y la capacidad.
+
+### Resolver por backtracking
+1. Seleccionar `4 - Gestion de ambulancias e insumos`.
+2. Seleccionar `4 - Resolver por backtracking puro`.
+3. Ingresar el id y la capacidad.
+
+### Resolver por branch and bound
+1. Seleccionar `4 - Gestion de ambulancias e insumos`.
+2. Seleccionar `5 - Resolver por branch and bound`.
+3. Ingresar el id y la capacidad.
+
+## Observaciones Técnicas
+- La solución trabaja con una comparación de peso usando un margen pequeño para evitar problemas de precisión con números flotantes.
+- Branch and Bound usa una ordenación propia de los insumos por relación valor/peso.
+- La persistencia es simple y está basada en archivos de texto, por lo que no requiere base de datos externa.
 
 ### Ejemplo de uso para Punto A:
 
@@ -224,11 +382,6 @@ Desde la raíz del proyecto:
 
 1. Seleccionar desde el menu principal `2 - Gestion de Pacientes y Turnos`.
 
-### Consideraciones
-
-> Se trabajo los Turnos y Pacientes como vectores dentro de Hospital y SistemaHospitalario
-> Para las tareas que requieren ordenamiento temporal, se reutiliza una función genérica de Quicksort que esta en Sort, para por ejemplo ordenar según el campo fecha.
-
 #### Ejemplo de uso para Punto B.1
 
 2. Seleccionar `1 - Total pacientes atendidos por hospital/fecha`.
@@ -236,28 +389,17 @@ Desde la raíz del proyecto:
 3. Ingrese fecha de inicio (AAAAMMDD): `20260601`
 4. Ingrese fecha de fin (AAAAMMDD): `20260607`
 
-> Complejidad Temporal: O(T), donde T es la cantidad total de turnos que posee el hospital seleccionado.
-> Estructura: El uso de vector<Turno> es por si el ingreso de datos es secuencial y masivo.
-> Alternativa de Mejora: Si los turnos ya se guardaran ordenados por fecha de manera nativa en el vector, se podría aplicar una Búsqueda Binaria para encontrar los índices de inicio y fin del rango, reduciendo la complejidad de filtrado a O(log T).
-
 #### Ejemplo de uso para Punto B.2
 
-1. Seleccionar `2 - Detectar hospitales con sobrecarga`.
-2. Ingrese la cantidad maxima de ingresos semanales permitidos: `3`
-3. Probar devuelta con: `5`
-
-> Complejidad Temporal: O(H .(T .log T)) , donde H es la cantidad de hospitales y T el número de turnos del hospital. Por cada hospital se ejecuta un quickSort sobre sus turnos y luego, para cada turno, se hace una búsqueda binaria.
-> Estructura: Al no estar ordenados cronológicamente los turnos desde el inicio, la combinación de quickSort junto con la búsqueda binaria evita tener que hacer un doble for anidado cuadrático O(T^2) por cada hospital.
-> Alternativa de Mejora: Insertar los turnos ordenados desde el principio.
+1. Seleccionar `2 - Gestion de Pacientes y Turnos`.
+2. Seleccionar `2 - Detectar hospitales con sobrecarga`.
+3. Ingrese la cantidad maxima de ingresos semanales permitidos: `3`
+4. Probar devuelta con: `5`
 
 #### Ejemplo de uso para Punto B.3
 
 1. Seleccionar `3 - Buscar turnos de un paciente (DNI)`.
 2. Ingrese el DNI del paciente: `45000111`
-
-> Complejidad Temporal: O(P + H . T), donde P es la cantidad total de pacientes en el sistema, H es la cantidad de hospitales y T es la cantidad promedio de turnos por hospital.
-> Estructura: La estructura actual obliga a realizar búsquedas lineales.
-> Alternativa de Mejora: -
 
 #### Ejemplo de uso para Punto B.4
 
@@ -270,115 +412,21 @@ Desde la raíz del proyecto:
 7. Devuelta en el Menu seleccionamos `1 - Insertar Paciente a Cola de Prioridad`.
 8. Ingresamos como Hospital: `HGA`, ID: `10`, DNI: `40555666`, Fecha: `20260630`, Diagnostico: `Fractura`, Prioridad: `1` y Peso: `60`
 
-> Complejidad Temporal: O(log N)
-> Estructura: Se utilizó una Cola de Prioridad (Min-Heap) mediante la clase ColaPrioridad. Es la estructura ideal para este problema ya que garantiza un acceso inmediato al paciente más urgente de forma eficiente
-> Alternativa de Mejora: -
-
 #### Ejemplo de uso para Punto B.5
 
 1. Seleccionar `5 - Listar turnos de medico en orden cronologico`.
 2. Ingrese el DNI del paciente: `2001`
 
-> Complejidad Temporal: O(H . T + M . log M), donde H es la cantidad de hospitales, $T$ es el promedio de turnos por hospital, y $M$ es la cantidad de turnos específicos que pertenecen al médico consultado
-> Estructura: -
-> Alternativa de Mejora: -
+### Ejemplo de uso para Punto C:
 
-### Ejemplo de uso para Punto C
+Desde el menú principal:
 
-Desde el menú principal seleccionar:
+1. Seleccionar `3 - Arbol de Diagnosticos`.
+2. Seleccionar `1 - Insertar diagnostico`.
+3. Ingresar nombre y frecuencia inicial.
+4. Seleccionar `2 - Incrementar frecuencia`.
+5. Seleccionar `3 - Listar diagnosticos`.
+6. Seleccionar `10 - Comparar alturas BST y AVL`.
+Y algo de memoria dinámica:
 
-`3 - Árbol de Diagnósticos`
-
----
-
-#### C.1 - Insertar diagnóstico
-
-Permite registrar un nuevo diagnóstico indicando su nombre y frecuencia inicial. El diagnóstico se inserta en el Árbol Binario de Búsqueda (BST) respetando el criterio de orden por frecuencia y nombre, y simultáneamente se incorpora al Árbol AVL para mantener ambas estructuras sincronizadas.
-
-**Ejemplo de uso**
-
-1. Seleccionar `1 - Insertar diagnóstico`.
-2. Ingresar nombre: `Covid`.
-3. Ingresar frecuencia inicial: `1`.
-
----
-
-#### C.2 - Incrementar frecuencia
-
-Permite actualizar la frecuencia de aparición de un diagnóstico existente. Como la frecuencia forma parte del criterio de orden, el diagnóstico se elimina temporalmente y se reinserta con la nueva frecuencia tanto en el BST como en el AVL, preservando las propiedades de ambas estructuras.
-
-**Ejemplo de uso**
-
-1. Seleccionar `2 - Incrementar frecuencia`.
-2. Ingresar el nombre del diagnóstico: `Covid`.
-
----
-
-#### C.3 - Listar diagnósticos
-
-Muestra todos los diagnósticos ordenados mediante un recorrido **Inorder**. Debido al criterio de orden utilizado, los diagnósticos se presentan de menor a mayor frecuencia y, en caso de empate, ordenados alfabéticamente por nombre.
-
-**Ejemplo de uso**
-
-1. Seleccionar `3 - Listar diagnósticos (BST)`.
-
----
-
-#### C.4 - Mostrar diagnóstico más frecuente
-
-Obtiene el diagnóstico con mayor frecuencia registrada recorriendo el árbol según el criterio de orden implementado.
-
-**Ejemplo de uso**
-
-1. Seleccionar `4 - Mostrar diagnóstico más frecuente`.
-
----
-
-#### C.5 - Eliminar diagnóstico
-
-Permite eliminar un diagnóstico del árbol manteniendo la propiedad del BST. Se contemplan los casos clásicos de eliminación (hoja, un hijo o dos hijos) y el AVL se actualiza para conservar el balance de la estructura.
-
-**Ejemplo de uso**
-
-1. Seleccionar `5 - Eliminar diagnóstico`.
-2. Ingresar el nombre del diagnóstico: `Covid`.
-
----
-
-#### C.6 - Calcular altura y detectar desbalance
-
-Calcula la altura del Árbol Binario de Búsqueda y determina si se encuentra desbalanceado según el criterio establecido en la consigna. Esta funcionalidad permite analizar el comportamiento del BST frente al AVL.
-
-**Ejemplo de uso**
-
-1. Seleccionar `6 - Mostrar altura del árbol BST`.
-2. Seleccionar `7 - Detectar desbalance del BST`.
-
----
-
-#### C.7 - Comparación entre BST y AVL
-
-Como extensión del trabajo, se implementó un Árbol AVL independiente que almacena el mismo conjunto de diagnósticos que el BST. Esta opción permite visualizar ambas estructuras y comparar sus alturas para observar la diferencia entre un árbol binario de búsqueda simple y un árbol auto-balanceado.
-
-**Ejemplo de uso**
-
-1. Seleccionar `8 - Mostrar árbol BST`.
-2. Seleccionar `9 - Mostrar árbol AVL`.
-3. Seleccionar `10 - Comparar alturas BST y AVL`.
-4. Seleccionar `11 - Listar diagnósticos AVL`.
-
----
-
-### Manejo de memoria dinámica
-
-Los diagnósticos se crean dinámicamente mediante `new`, por lo que fue necesario implementar una correcta administración de memoria.
-
-Ambos árboles poseen destructores recursivos que recorren la estructura en postorden liberando cada nodo mediante `delete`. Además, cuando un diagnóstico es eliminado individualmente, la memoria correspondiente también se libera explícitamente, evitando pérdidas de memoria durante la ejecución del sistema.
-
-### Justificación del diseño
-
-Se eligió un Árbol Binario de Búsqueda para mantener los diagnósticos ordenados por frecuencia de aparición, permitiendo obtener el diagnóstico más frecuente de forma eficiente y listar los diagnósticos ordenados mediante un recorrido Inorder.
-
-Como varios diagnósticos pueden compartir la misma frecuencia, se utilizó el nombre como criterio secundario de orden para garantizar un orden total dentro del árbol.
-
-Además, se implementó un Árbol AVL como extensión con el objetivo de comparar el comportamiento de ambas estructuras. Mientras que el BST puede desbalancearse dependiendo del orden de inserción, el AVL mantiene una altura logarítmica mediante rotaciones automáticas, mejorando el rendimiento de las operaciones de inserción, búsqueda y eliminación cuando el árbol crece.
+Los diagnósticos se crean dinámicamente con `new`. Para evitar fugas de memoria, ambos árboles implementan destructores recursivos que liberan los nodos restantes al finalizar la vida útil de la estructura. Además, al eliminar un diagnóstico se libera explícitamente el nodo correspondiente con `delete`.
